@@ -1,4 +1,22 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
+const categories = [
+  {
+    category: "Strings"
+  },
+  {
+    category: "Algorithms"
+  },
+  {
+    category: "Data Structures"
+  },
+  {
+    category: "Bit Manipulation"
+  },
+  {
+    category: "Databases"
+  },
+];
+
 const question = [
   {
     id: '1',
@@ -28,28 +46,28 @@ const question = [
     '1 <= s.length <= 105' +
     's[i] is a printable ascii ' +
     'character.',
-    caterory: 'Strings, Algorithms',
+    category: 'Strings, Algorithms',
     complexity: 'Easy',
   },
   {
     id: '2',
     title: 'Linked List Cycle Detection',
     description: 'Implement a function to detect if a linked list contains a cycle.',
-    caterory: 'Data Structures, Algorithms',
+    category: 'Data Structures, Algorithms',
     complexity: 'Easy',
   },
   {
     id: '3',
     title: 'Roman to Integer',
     description: 'Given a roman numeral, convert it to an integer.',
-    caterory: 'Algorithms',
+    category: 'Algorithms',
     complexity: 'Easy',
   },
   {
     id: '4',
     title: 'Add Binary',
     description: 'Given two binary strings a and b, return their sum as a binary string.',
-    caterory: 'Bit Manipulati on, Algorithms',
+    category: 'Bit Manipulation, Algorithms',
     complexity: 'Easy',
   },
   {
@@ -70,7 +88,7 @@ const question = [
     '2), for n > 1.'+
     'Given n, calculate '+
     'F(n).',
-    caterory: 'Recursion, Algorithms',
+    category: 'Recursion, Algorithms',
     complexity: 'Easy',
   },
   {
@@ -84,7 +102,7 @@ const question = [
     'functions of a normal '+
     'stack (push, top, pop, '+
     'and empty).',
-    caterory: 'Data Structures',
+    category: 'Data Structures',
     complexity: 'Easy',
   },
   {
@@ -123,7 +141,7 @@ const question = [
     'null instead.'+
     'Return the result '+
     'table in any order.',
-    caterory: 'Databases',
+    category: 'Databases',
     complexity: 'Easy',
   },
 
@@ -140,4 +158,5 @@ const questionShowTitleComplexity = question.map(item => {
 module.exports = {
   question,
   questionShowTitleComplexity,
+  categories,
 };
