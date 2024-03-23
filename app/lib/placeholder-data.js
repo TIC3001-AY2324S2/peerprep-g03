@@ -1,302 +1,142 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
-// https://nextjs.org/learn/dashboard-app/fetching-data
-const users = [
+const question = [
   {
-    id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'User',
-    email: 'user@nextmail.com',
-    password: '123456',
+    id: 1,
+    title: 'Reverse a String',
+    description: 'Write a function that ' +
+    'reverses a string. The ' +
+    'input string is given as ' +
+    'an array of characters ' +
+    's.' +
+    'You must do this by ' +
+    'modifying the input ' +
+    'array in-place with ' +
+    'O(1) extra memory.' +
+    'Example 1:'+
+    'Input: s = '+
+    '["h","e","l","l","o"]' +
+    'Output: ' +
+    '["o","l","l","e","h"]' +
+    'Example 2:' +
+    'Input: s = ' +
+    '["H","a","n","n","a","'+
+    'h"]' +
+    'Output:' +
+    '["h","a","n","n","a","' +
+    'H"]'+
+    'Constraints:' +
+    '1 <= s.length <= 105' +
+    's[i] is a printable ascii ' +
+    'character.',
+    caterory: 'Strings, Algorithms',
+    complexity: 'Easy',
   },
+  {
+    id: 2,
+    title: 'Linked List Cycle Detection',
+    description: 'Implement a function to detect if a linked list contains a cycle.',
+    caterory: 'Data Structures, Algorithms',
+    complexity: 'Easy',
+  },
+  {
+    id: 3,
+    title: 'Roman to Integer',
+    description: 'Given a roman numeral, convert it to an integer.',
+    caterory: 'Algorithms',
+    complexity: 'Easy',
+  },
+  {
+    id: 4,
+    title: 'Add Binary',
+    description: 'Given two binary strings a and b, return their sum as a binary string.',
+    caterory: 'Bit Manipulati on, Algorithms',
+    complexity: 'Easy',
+  },
+  {
+    id: 5,
+    title: 'Fibonacci Number',
+    description: 'The Fibonacci '+
+    'numbers, commonly '+
+    'denoted F(n) form a '+
+    'sequence, called the '+
+    'Fibonacci sequence, '+
+    'such that each '+
+    'number is the sum of '+
+    'the two preceding '+
+    'ones, starting from 0' +
+    'and 1. That is,'+
+    'F(0) = 0, F(1) = 1'+
+    'F(n) = F(n - 1) + F(n -'+
+    '2), for n > 1.'+
+    'Given n, calculate '+
+    'F(n).',
+    caterory: 'Recursion, Algorithms',
+    complexity: 'Easy',
+  },
+  {
+    id: 6,
+    title: 'Implement Stack using Queues',
+    description: 'Implement a last-infirst-out (LIFO) stack '+
+    'using only two '+
+    'queues. The '+
+    'implemented stack '+
+    'should support all the '+
+    'functions of a normal '+
+    'stack (push, top, pop, '+
+    'and empty).',
+    caterory: 'Data Structures',
+    complexity: 'Easy',
+  },
+  {
+    id: 7,
+    title: 'Combine Two Tables',
+    description: 'Given table Person '+
+    'with the following '+
+    'columns:'+
+    '1. personId (int)'+
+    '2. lastName '+
+    '(varchar)'+
+    '3. firstName' +
+    '(varchar)'+
+    'personId is the' +
+    'primary key.'+
+    'And table Address '+
+    'with the following '+
+    'columns:'+
+    '1. addressId '+
+    '(int)'+
+    '2. personId (int)'+
+    '3. city (varchar)'+
+    '4. state '+
+    '(varchar)'+
+    'addressId is the '+
+    'primary key.'+
+    'Write a solution to '+
+    'report the first name, '+
+    'last name, city, and '+
+    'state of each person '+
+    'in the Person table. If '+
+    'the address of a '+
+    'personId is not '+
+    'present in the '+
+    'Address table, report '+
+    'null instead.'+
+    'Return the result '+
+    'table in any order.',
+    caterory: 'Databases',
+    complexity: 'Easy',
+  },
+
 ];
 
-const customers = [
-  {
-    id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
-    name: 'Delba de Oliveira',
-    email: 'delba@oliveira.com',
-    image_url: '/customers/delba-de-oliveira.png',
-  },
-  {
-    id: '3958dc9e-742f-4377-85e9-fec4b6a6442a',
-    name: 'Lee Robinson',
-    email: 'lee@robinson.com',
-    image_url: '/customers/lee-robinson.png',
-  },
-  {
-    id: '3958dc9e-737f-4377-85e9-fec4b6a6442a',
-    name: 'Hector Simpson',
-    email: 'hector@simpson.com',
-    image_url: '/customers/hector-simpson.png',
-  },
-  {
-    id: '50ca3e18-62cd-11ee-8c99-0242ac120002',
-    name: 'Steven Tey',
-    email: 'steven@tey.com',
-    image_url: '/customers/steven-tey.png',
-  },
-  {
-    id: '3958dc9e-787f-4377-85e9-fec4b6a6442a',
-    name: 'Steph Dietz',
-    email: 'steph@dietz.com',
-    image_url: '/customers/steph-dietz.png',
-  },
-  {
-    id: '76d65c26-f784-44a2-ac19-586678f7c2f2',
-    name: 'Michael Novotny',
-    email: 'michael@novotny.com',
-    image_url: '/customers/michael-novotny.png',
-  },
-  {
-    id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
-    name: 'Evil Rabbit',
-    email: 'evil@rabbit.com',
-    image_url: '/customers/evil-rabbit.png',
-  },
-  {
-    id: '126eed9c-c90c-4ef6-a4a8-fcf7408d3c66',
-    name: 'Emil Kowalski',
-    email: 'emil@kowalski.com',
-    image_url: '/customers/emil-kowalski.png',
-  },
-  {
-    id: 'CC27C14A-0ACF-4F4A-A6C9-D45682C144B9',
-    name: 'Amy Burns',
-    email: 'amy@burns.com',
-    image_url: '/customers/amy-burns.png',
-  },
-  {
-    id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
-    name: 'Balazs Orban',
-    email: 'balazs@orban.com',
-    image_url: '/customers/balazs-orban.png',
-  },
-];
-
-const invoices = [
-  {
-    customer_id: customers[0].id,
-    amount: 15795,
-    status: 'pending',
-    date: '2022-12-06',
-  },
-  {
-    customer_id: customers[1].id,
-    amount: 20348,
-    status: 'pending',
-    date: '2022-11-14',
-  },
-  {
-    customer_id: customers[4].id,
-    amount: 3040,
-    status: 'paid',
-    date: '2022-10-29',
-  },
-  {
-    customer_id: customers[3].id,
-    amount: 44800,
-    status: 'paid',
-    date: '2023-09-10',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 34577,
-    status: 'pending',
-    date: '2023-08-05',
-  },
-  {
-    customer_id: customers[7].id,
-    amount: 54246,
-    status: 'pending',
-    date: '2023-07-16',
-  },
-  {
-    customer_id: customers[6].id,
-    amount: 666,
-    status: 'pending',
-    date: '2023-06-27',
-  },
-  {
-    customer_id: customers[3].id,
-    amount: 32545,
-    status: 'paid',
-    date: '2023-06-09',
-  },
-  {
-    customer_id: customers[4].id,
-    amount: 1250,
-    status: 'paid',
-    date: '2023-06-17',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8546,
-    status: 'paid',
-    date: '2023-06-07',
-  },
-  {
-    customer_id: customers[1].id,
-    amount: 500,
-    status: 'paid',
-    date: '2023-08-19',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-06-03',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-06-18',
-  },
-  {
-    customer_id: customers[0].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-10-04',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 1000,
-    status: 'paid',
-    date: '2022-06-05',
-  },
-];
-
-const revenue = [
-  { month: 'Jan', revenue: 2000 },
-  { month: 'Feb', revenue: 1800 },
-  { month: 'Mar', revenue: 2200 },
-  { month: 'Apr', revenue: 2500 },
-  { month: 'May', revenue: 2300 },
-  { month: 'Jun', revenue: 3200 },
-  { month: 'Jul', revenue: 3500 },
-  { month: 'Aug', revenue: 3700 },
-  { month: 'Sep', revenue: 2500 },
-  { month: 'Oct', revenue: 2800 },
-  { month: 'Nov', revenue: 3000 },
-  { month: 'Dec', revenue: 4800 },
-];
-
-const customeInvoices = [
-  {
-    id: '81fa2dab-3874-4cf7-9436-5c7b3facda80',
-    amount: 8945,
-    date: '2023-10-03',
-    status: 'paid',
-    name: 'Delba de Oliveira',
-    email: 'delba@oliveira.com',
-    image_url: '/customers/delba-de-oliveira.png'
-  },
-  {
-    id: '7a53cc3e-4997-4c96-ad04-d8c48a5bcbe7',
-    amount: 44800,
-    date: '2023-09-09',
-    status: 'paid',
-    name: 'Steven Tey',
-    email: 'steven@tey.com',
-    image_url: '/customers/steven-tey.png'
-  },
-  {
-    id: '0635f62c-ff40-4521-8c96-9626f57bfc53',
-    amount: 500,
-    date: '2023-08-18',
-    status: 'paid',
-    name: 'Lee Robinson',
-    email: 'lee@robinson.com',
-    image_url: '/customers/lee-robinson.png'
-  },
-  {
-    id: 'f8dca248-44ce-438f-a098-f15b86335519',
-    amount: 34577,
-    date: '2023-08-04',
-    status: 'pending',
-    name: 'Michael Novotny',
-    email: 'michael@novotny.com',
-    image_url: '/customers/michael-novotny.png'
-  },
-  {
-    id: '9e13a0a3-e17f-400a-a4ee-eb301db4addb',
-    amount: 54246,
-    date: '2023-07-15',
-    status: 'pending',
-    name: 'Emil Kowalski',
-    email: 'emil@kowalski.com',
-    image_url: '/customers/emil-kowalski.png'
-  },
-  {
-    id: '13787028-9274-424c-b526-23ff3a4a400b',
-    amount: 666,
-    date: '2023-06-26',
-    status: 'pending',
-    name: 'Evil Rabbit',
-    email: 'evil@rabbit.com',
-    image_url: '/customers/evil-rabbit.png'
-  }
-]
-[
-  {
-    id: '81fa2dab-3874-4cf7-9436-5c7b3facda80',
-    amount: 8945,
-    date: '2023-10-03',
-    status: 'paid',
-    name: 'Delba de Oliveira',
-    email: 'delba@oliveira.com',
-    image_url: '/customers/delba-de-oliveira.png'
-  },
-  {
-    id: '7a53cc3e-4997-4c96-ad04-d8c48a5bcbe7',
-    amount: 44800,
-    date: '2023-09-09',
-    status: 'paid',
-    name: 'Steven Tey',
-    email: 'steven@tey.com',
-    image_url: '/customers/steven-tey.png'
-  },
-  {
-    id: '0635f62c-ff40-4521-8c96-9626f57bfc53',
-    amount: 500,
-    date: '2023-08-18',
-    status: 'paid',
-    name: 'Lee Robinson',
-    email: 'lee@robinson.com',
-    image_url: '/customers/lee-robinson.png'
-  },
-  {
-    id: 'f8dca248-44ce-438f-a098-f15b86335519',
-    amount: 34577,
-    date: '2023-08-04',
-    status: 'pending',
-    name: 'Michael Novotny',
-    email: 'michael@novotny.com',
-    image_url: '/customers/michael-novotny.png'
-  },
-  {
-    id: '9e13a0a3-e17f-400a-a4ee-eb301db4addb',
-    amount: 54246,
-    date: '2023-07-15',
-    status: 'pending',
-    name: 'Emil Kowalski',
-    email: 'emil@kowalski.com',
-    image_url: '/customers/emil-kowalski.png'
-  },
-  {
-    id: '13787028-9274-424c-b526-23ff3a4a400b',
-    amount: 666,
-    date: '2023-06-26',
-    status: 'pending',
-    name: 'Evil Rabbit',
-    email: 'evil@rabbit.com',
-    image_url: '/customers/evil-rabbit.png'
-  }
-];
+const questionShowTitleComplexity = question.map(item => {
+  return {
+    title: item.title,
+    complexity: item.complexity
+  };
+});
 
 module.exports = {
-  users,
-  customers,
-  invoices,
-  revenue,
-  customeInvoices,
+  question,
+  questionShowTitleComplexity,
 };
