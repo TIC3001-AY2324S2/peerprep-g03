@@ -1,19 +1,24 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 const categories = [
   {
-    category: "Strings"
+    id: '1',
+    name: "Strings"
   },
   {
-    category: "Algorithms"
+    id: '2',
+    name: "Algorithms"
   },
   {
-    category: "Data Structures"
+    id: '3',
+    name: "Data Structures"
   },
   {
-    category: "Bit Manipulation"
+    id: '4',
+    name: "Bit Manipulation"
   },
   {
-    category: "Databases"
+    id: '5',
+    name: "Databases"
   },
 ];
 
