@@ -1,7 +1,7 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 const question = [
   {
-    id: 1,
+    id: '1',
     title: 'Reverse a String',
     description: 'Write a function that ' +
     'reverses a string. The ' +
@@ -32,28 +32,28 @@ const question = [
     complexity: 'Easy',
   },
   {
-    id: 2,
+    id: '2',
     title: 'Linked List Cycle Detection',
     description: 'Implement a function to detect if a linked list contains a cycle.',
     caterory: 'Data Structures, Algorithms',
     complexity: 'Easy',
   },
   {
-    id: 3,
+    id: '3',
     title: 'Roman to Integer',
     description: 'Given a roman numeral, convert it to an integer.',
     caterory: 'Algorithms',
     complexity: 'Easy',
   },
   {
-    id: 4,
+    id: '4',
     title: 'Add Binary',
     description: 'Given two binary strings a and b, return their sum as a binary string.',
     caterory: 'Bit Manipulati on, Algorithms',
     complexity: 'Easy',
   },
   {
-    id: 5,
+    id: '5',
     title: 'Fibonacci Number',
     description: 'The Fibonacci '+
     'numbers, commonly '+
@@ -74,7 +74,7 @@ const question = [
     complexity: 'Easy',
   },
   {
-    id: 6,
+    id: '6',
     title: 'Implement Stack using Queues',
     description: 'Implement a last-infirst-out (LIFO) stack '+
     'using only two '+
@@ -88,7 +88,7 @@ const question = [
     complexity: 'Easy',
   },
   {
-    id: 7,
+    id: '7',
     title: 'Combine Two Tables',
     description: 'Given table Person '+
     'with the following '+
@@ -131,6 +131,7 @@ const question = [
 
 const questionShowTitleComplexity = question.map(item => {
   return {
+    id: item.id,
     title: item.title,
     complexity: item.complexity
   };
