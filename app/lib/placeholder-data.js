@@ -52,28 +52,28 @@ const question = [
     's[i] is a printable ascii ' +
     'character.',
     category: 'Strings, Algorithms',
-    complexity: 'Easy',
+    complexity: 'easy',
   },
   {
     id: '2',
     title: 'Linked List Cycle Detection',
     description: 'Implement a function to detect if a linked list contains a cycle.',
     category: 'Data Structures, Algorithms',
-    complexity: 'Easy',
+    complexity: 'easy',
   },
   {
     id: '3',
     title: 'Roman to Integer',
     description: 'Given a roman numeral, convert it to an integer.',
     category: 'Algorithms',
-    complexity: 'Easy',
+    complexity: 'easy',
   },
   {
     id: '4',
     title: 'Add Binary',
     description: 'Given two binary strings a and b, return their sum as a binary string.',
     category: 'Bit Manipulation, Algorithms',
-    complexity: 'Easy',
+    complexity: 'easy',
   },
   {
     id: '5',
@@ -94,7 +94,7 @@ const question = [
     'Given n, calculate '+
     'F(n).',
     category: 'Recursion, Algorithms',
-    complexity: 'Easy',
+    complexity: 'easy',
   },
   {
     id: '6',
@@ -108,7 +108,7 @@ const question = [
     'stack (push, top, pop, '+
     'and empty).',
     category: 'Data Structures',
-    complexity: 'Easy',
+    complexity: 'easy',
   },
   {
     id: '7',
@@ -147,7 +147,7 @@ const question = [
     'Return the result '+
     'table in any order.',
     category: 'Databases',
-    complexity: 'Easy',
+    complexity: 'easy',
   },
 
 ];
@@ -160,8 +160,18 @@ const questionShowTitleComplexity = question.map(item => {
   };
 });
 
+function getDataById(id){
+  for (const item of question){
+      if (item.id == id){
+          return item;
+      }
+  }
+  return null;
+}
+
 module.exports = {
   question,
   questionShowTitleComplexity,
   categories,
+  getDataById,
 };

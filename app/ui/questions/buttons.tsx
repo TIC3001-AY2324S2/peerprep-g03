@@ -16,7 +16,7 @@ export function CreateQuestion() {
 export function UpdateQuestion({ id }: { id: string }) {
   return (
     <Link
-      href="/questions/update"
+      href={`/questions/${id}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -27,7 +27,7 @@ export function UpdateQuestion({ id }: { id: string }) {
 export function ReadQuestion({ id }: { id: string }) {
   return (
     <Link
-      href="/questions"
+      href={`/questions/${id}`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <BookOpenIcon className="w-5" />
