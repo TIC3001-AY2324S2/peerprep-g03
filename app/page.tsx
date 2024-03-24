@@ -1,10 +1,7 @@
 import PeerprepLogo from '@/app/ui/peerprep-logo';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { CreateQuestion } from '@/app/ui/questions/buttons';
-import Link from 'next/link';
 import Search from '@/app/ui/search';
 import {lusitana} from '@/app/ui/fonts';
-import Image from 'next/image';
 import Table from '@/app/ui/questions/table';
 
 export default function Page() {

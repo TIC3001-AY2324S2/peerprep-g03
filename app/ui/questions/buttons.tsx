@@ -1,5 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon, BookOpenIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { deleteQuestion } from '@/app/lib/action';
 
 export function CreateQuestion() {
   return (
@@ -27,7 +28,7 @@ export function UpdateQuestion({ id }: { id: string }) {
 export function ReadQuestion({ id }: { id: string }) {
   return (
     <Link
-      href={`/questions/${id}`}
+      href={`/questions/${id}/read`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <BookOpenIcon className="w-5" />
@@ -36,12 +37,13 @@ export function ReadQuestion({ id }: { id: string }) {
 }
 
 export function DeleteQuestion({ id }: { id: string }) {
+  const deleteQuestionWithId = deleteQuestion.bind(null, id);
   return (
-    <>
+    <form action={deleteQuestionWithId}>
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-5" />
       </button>
-    </>
+    </form>
   );
 }
