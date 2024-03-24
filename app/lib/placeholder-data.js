@@ -37,7 +37,7 @@ const question = [
     's[i] is a printable ascii ' +
     'character.',
     category: 'Strings, Algorithms',
-    complexity: 'easy',
+    complexity: 'hard',
   },
   {
     id: '2',
