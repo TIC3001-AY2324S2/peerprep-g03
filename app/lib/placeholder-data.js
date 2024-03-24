@@ -1,25 +1,10 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 const categories = [
-  {
-    id: '1',
-    name: "Strings"
-  },
-  {
-    id: '2',
-    name: "Algorithms"
-  },
-  {
-    id: '3',
-    name: "Data Structures"
-  },
-  {
-    id: '4',
-    name: "Bit Manipulation"
-  },
-  {
-    id: '5',
-    name: "Databases"
-  },
+  {value: '1', label: "Strings"},
+  {value: '2', label: "Algorithms"},
+  {value: '3', label: "Data Structures"},
+  {value: '4', label: "Bit Manipulation"},
+  {value: '5', label: "Databases"},
 ];
 
 const question = [
