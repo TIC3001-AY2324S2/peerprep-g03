@@ -7,6 +7,9 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
+import React, { useState, Component } from "react";
+import Select from "react-select";
+
 
 export default function Form(
   {categories} : 
