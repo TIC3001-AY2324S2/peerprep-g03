@@ -1,9 +1,8 @@
-import Image from 'next/image';
 import { UpdateQuestion, DeleteQuestion, ReadQuestion } from '@/app/ui/questions/buttons';
-import { questionShowTitleComplexity, categories } from '@/app/lib/placeholder-data.js';
+import { categories } from '@/app/lib/placeholder-data.js';
+import { QuestionsField } from '@/app/lib/definitions';
 
-export async function QuestionsTable() {
-  const questions = questionShowTitleComplexity;
+export async function QuestionsTable({ questions }: { questions: QuestionsField[] }) {
 
   return (
     <div className="mt-6 flow-root">
@@ -41,7 +40,7 @@ export async function QuestionsTable() {
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Status
-                </th>                
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white">
@@ -93,14 +92,14 @@ export async function CategoriesTable() {
                   <div>
                     <div className="mb-2 flex items-center">
                       <p>{category.label}</p>
-                    </div>                    
+                    </div>
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div className="flex justify-end gap-2">
-                  <ReadQuestion id={category.value} />
-                  <UpdateQuestion id={category.value} />
-                  <DeleteQuestion id={category.value} />
+                    <ReadQuestion id={category.value} />
+                    <UpdateQuestion id={category.value} />
+                    <DeleteQuestion id={category.value} />
                   </div>
                 </div>
               </div>
@@ -111,7 +110,7 @@ export async function CategoriesTable() {
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   Catetories
-                </th>                               
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white">
@@ -124,9 +123,9 @@ export async function CategoriesTable() {
                     <div className="flex items-center gap-3">
                       <p>{category.label}</p>
                     </div>
-                  </td>                 
+                  </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex justify-end gap-3">                      
+                    <div className="flex justify-end gap-3">
                       <UpdateQuestion id={category.value} />
                       <DeleteQuestion id={category.value} />
                     </div>

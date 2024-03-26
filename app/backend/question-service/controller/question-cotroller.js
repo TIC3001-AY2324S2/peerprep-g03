@@ -56,7 +56,7 @@ export async function getQuestion(req, res) {
         console.log("getQuestion function call.");
         return res
             .status(200)
-            .json({message: simplifiedQuestionDetails});
+            .json({question});
     } catch (error) {
         
     }
