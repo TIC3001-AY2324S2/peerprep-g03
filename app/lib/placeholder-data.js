@@ -59,7 +59,7 @@ const question = [
     title: 'Add Binary',
     description: 'Given two binary strings a and b, return their sum as a binary string.',
     category: 'Bit Manipulation, Algorithms',
-    complexity: 'easy',
+    complexity: 'medium',
   },
   {
     id: '5',
@@ -94,7 +94,7 @@ const question = [
     'stack (push, top, pop, '+
     'and empty).',
     category: 'Data Structures',
-    complexity: 'easy',
+    complexity: 'medium',
   },
   {
     id: '7',
@@ -133,7 +133,7 @@ const question = [
     'Return the result '+
     'table in any order.',
     category: 'Databases',
-    complexity: 'easy',
+    complexity: 'hard',
   },
 
 ];

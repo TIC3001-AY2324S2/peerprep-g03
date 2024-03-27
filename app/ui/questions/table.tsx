@@ -1,5 +1,5 @@
 import { UpdateQuestion, DeleteQuestion, ReadQuestion, UpdateCategory } from '@/app/ui/questions/buttons';
-// import { categories } from '@/app/lib/placeholder-data.js';
+import QuestionComplexity from '@/app/ui/questions/complexity';
 import { QuestionsField, CategoriesField } from '@/app/lib/definitions';
 
 export async function QuestionsTable({ questions }: { questions: QuestionsField[] }) {
@@ -18,8 +18,8 @@ export async function QuestionsTable({ questions }: { questions: QuestionsField[
                   <div>
                     <div className="mb-2 flex items-center">
                       <p>{question.title}</p>
-                    </div>
-                    <p className="text-sm text-gray-500">{question.complexity}</p>
+                    </div>                    
+                    <QuestionComplexity complexity={question.complexity} />
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
@@ -39,7 +39,7 @@ export async function QuestionsTable({ questions }: { questions: QuestionsField[
                   Title
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Status
+                  Complexity
                 </th>
               </tr>
             </thead>
@@ -55,7 +55,7 @@ export async function QuestionsTable({ questions }: { questions: QuestionsField[
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {question.complexity}
+                    <QuestionComplexity complexity={question.complexity} />
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
