@@ -1,4 +1,4 @@
-import { UpdateQuestion, DeleteQuestion, ReadQuestion } from '@/app/ui/questions/buttons';
+import { UpdateQuestion, DeleteQuestion, ReadQuestion, UpdateCategory } from '@/app/ui/questions/buttons';
 import { categories } from '@/app/lib/placeholder-data.js';
 import { QuestionsField } from '@/app/lib/definitions';
 
@@ -97,8 +97,7 @@ export async function CategoriesTable() {
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div className="flex justify-end gap-2">
-                    <ReadQuestion id={category.value} />
-                    <UpdateQuestion id={category.value} />
+                    <UpdateCategory id={category.value} />
                     <DeleteQuestion id={category.value} />
                   </div>
                 </div>
@@ -126,7 +125,7 @@ export async function CategoriesTable() {
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateQuestion id={category.value} />
+                      <UpdateCategory id={category.value} />
                       <DeleteQuestion id={category.value} />
                     </div>
                   </td>
