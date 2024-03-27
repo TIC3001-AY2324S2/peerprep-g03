@@ -10,14 +10,12 @@ import { Button } from '@/app/ui/button';
 import React, { useState } from "react";
 import Select from "react-select";
 import { createQuestion } from '@/app/lib/action';
+import { CategoriesField } from '@/app/lib/definitions';
 
 export default function Form(
   { categories }:
     {
-      categories: {
-        id: string;
-        name: string
-      }[]
+      categories: CategoriesField[];
     }) {
 
   const [selectedOptions, setSelectedOptions] = useState([]);

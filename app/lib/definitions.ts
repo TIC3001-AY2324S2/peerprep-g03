@@ -5,3 +5,8 @@ export type QuestionsField = {
     category: string;
     complexity: string;
   };
+
+  export type CategoriesField = {
+    value: string;
+    label: string;
+  };
