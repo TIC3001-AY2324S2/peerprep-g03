@@ -14,8 +14,10 @@ export default function EditInvoiceForm(
     categories: CategoriesField[];
   }) {
 
+  // State to keep track of selected categories
   const [selectedCategories, setSelectedCategories] = useState([]);
 
+  // Effect to pre-select checkboxes based on questions.category
   useEffect(() => {
     const defaultCategories = questions.category.split(', ').map(label => categories.find(category => category.label === label));
     setSelectedCategories(defaultCategories);

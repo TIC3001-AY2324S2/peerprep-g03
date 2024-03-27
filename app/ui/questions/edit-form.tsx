@@ -3,39 +3,57 @@
 import {
   QueueListIcon,
   DocumentTextIcon,
-  ChartPieIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import React, { useState, Component } from "react";
-import Select from "react-select";
+import React, { useState, useEffect } from "react";
+import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 import { updateQuestion } from '@/app/lib/action';
 
 export default function EditInvoiceForm(
   { questions, categories }: {
-    questions: {
-      id: string;
-      title: string;
-      description: string;
-      category: string;
-      complexity: string;
-    };
-    categories: {
-      id: string;
-      name: string
-    }[]
+    questions: QuestionsField[];
+    categories: CategoriesField[];
   }) {
 
-    const [selectedOptions, setSelectedOptions] = useState([]);
+  // State to keep track of selected categories
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
-    const setHandle = (e) => {
-      setSelectedOptions(Array.isArray(e) ? e.map((hotel) => hotel.label) : []);
-    };
+  // Function to handle checkbox change
+  const handleCheckboxChange = (event) => {
+    const { value, checked } = event.target;
+    const category = categories.find(category => category.value === value);
+    if (checked) {
+      setSelectedCategories([...selectedCategories, category]);
+    } else {
+      setSelectedCategories(selectedCategories.filter((selectedCategory) => selectedCategory.value !== value));
+    }
+  };
 
-    const updateQuestionWithId = updateQuestion.bind(null, questions.id);
+  // Effect to pre-select checkboxes based on questions.category
+  useEffect(() => {
+    const defaultCategories = questions.category.split(', ').map(label => categories.find(category => category.label === label));
+    setSelectedCategories(defaultCategories);
+  }, []);
+
+  const getSelectedLabels = () => {
+    return selectedCategories.map(category => category.label);
+  };
+  
+
+  function handleFormAction(formData: FormData) {
+    const rawFormData = {
+      id: questions.id,
+      title: formData.get('title'),
+      description: formData.get('description'),
+      category: getSelectedLabels().join(", "),
+      complexity: formData.get('complexity'),
+    }
+    updateQuestion(rawFormData);
+  }
 
   return (
-    <form action={updateQuestionWithId}>
+    <form action={handleFormAction}> {/*action={updateQuestionWithId}*/}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Title */}
         <div className="mb-4">
@@ -84,11 +102,23 @@ export default function EditInvoiceForm(
           </label>
           <div className="relative">
             <div className=" px-2	">
-              <Select id="category" name="categoryId"
-                className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                options={categories} onChange={setHandle} isMulti required />
-              <ChartPieIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-              </div>
+              {categories.map((category) =>
+                <div key={category.value}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      id="category"
+                      name="categoryId"
+                      value={category.value}
+                      checked={selectedCategories.some((selectedCategory) => selectedCategory.value === category.value)}
+                      onChange={handleCheckboxChange}
+                    />
+                    {category.label}
+                  </label>
+                </div>
+              )}
+
+            </div>
           </div>
         </div>
 

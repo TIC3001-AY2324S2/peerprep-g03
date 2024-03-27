@@ -25,7 +25,6 @@ export default function Form(
   };
 
   function handleFormAction(formData: FormData) {
-
     const rawFormData = {
       title: formData.get('title'),
       description: formData.get('description'),

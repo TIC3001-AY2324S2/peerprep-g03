@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 
 export async function createQuestion (rawFormData: {rawFormData: {
     title: string;
@@ -20,14 +21,8 @@ export async function createQuestion (rawFormData: {rawFormData: {
 }
 
 
-export async function updateQuestion (id: string, formData: FormData){
-    const rawFormData = {
-        title: formData.get('title'),
-        description: formData.get('description'),
-        category: formData.get('category'),
-        complexity: formData.get('complexity'),
-    }
-    console.log("id: " + id);
+export async function updateQuestion (rawFormData: QuestionsField[]){
+    
     console.log(rawFormData);
     // todo: updateQuestion on server
 
