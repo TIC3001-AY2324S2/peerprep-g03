@@ -12,7 +12,7 @@ export async function fetchQuestions() {
 
 export async function fetchQuestionById(id: string) {
     try {
-        const response = await axios.get(`http://localhost:3010/questions/${id}/read/`);        
+        const response = await axios.get(`http://localhost:3010/questions/${id}`);        
         const questionById = response.data.message;        
         return questionById; // This will be your JSON response
     } catch (err) {
