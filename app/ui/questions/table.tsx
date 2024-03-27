@@ -1,6 +1,6 @@
 import { UpdateQuestion, DeleteQuestion, ReadQuestion, UpdateCategory } from '@/app/ui/questions/buttons';
-import { categories } from '@/app/lib/placeholder-data.js';
-import { QuestionsField } from '@/app/lib/definitions';
+// import { categories } from '@/app/lib/placeholder-data.js';
+import { QuestionsField, CategoriesField } from '@/app/lib/definitions';
 
 export async function QuestionsTable({ questions }: { questions: QuestionsField[] }) {
 
@@ -74,16 +74,14 @@ export async function QuestionsTable({ questions }: { questions: QuestionsField[
   );
 }
 
-export async function CategoriesTable() {
-
-  const categoriesQuestions = categories;
+export async function CategoriesTable({ categories }: { categories: CategoriesField[] }) {
 
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {categoriesQuestions?.map((category) => (
+            {categories?.map((category) => (
               <div
                 key={category.value}
                 className="mb-2 w-full rounded-md bg-white p-4"

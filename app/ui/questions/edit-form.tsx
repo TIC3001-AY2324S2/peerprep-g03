@@ -62,7 +62,7 @@ export default function EditInvoiceForm(
           </label>
           <div className="relative">
             <input
-              id="titl"
+              id="title"
               name="title"
               type="string"
               defaultValue={questions.title}

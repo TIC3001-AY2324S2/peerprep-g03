@@ -3,11 +3,12 @@ import { CreateQuestion, CreateCategory } from '@/app/ui/questions/buttons';
 import Search from '@/app/ui/search';
 import { lusitana } from '@/app/ui/fonts';
 import { QuestionsTable, CategoriesTable } from '@/app/ui/questions/table';
-import { fetchQuestions } from '@/app/lib/data';
+import { fetchQuestions, fetchCategories } from '@/app/lib/data';
 
 export default async function Page() {
 
   const questions = await fetchQuestions();
+  const categories = await fetchCategories();
 
   return (
     <main className="flex min-h-screen flex-col p-6">
@@ -21,7 +22,7 @@ export default async function Page() {
           <div className='mt-4 flex items-center justify-between gap-2 md:mt-8'>
             <CreateCategory />
           </div>
-          <CategoriesTable />
+          <CategoriesTable categories={categories} />
         </div>
         <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
           <h1 className="text-[20px]">Question Table</h1>

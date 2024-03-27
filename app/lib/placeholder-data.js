@@ -5,6 +5,7 @@ const categories = [
   {value: '3', label: "Data Structures"},
   {value: '4', label: "Bit Manipulation"},
   {value: '5', label: "Databases"},
+  {value: '6', label: "Brainteaser"},
 ];
 
 const question = [
@@ -145,9 +146,18 @@ const questionShowTitleComplexity = question.map(item => {
   };
 });
 
-function getDataById(id){
+function askQuestionById(id){
   for (const item of question){
       if (item.id == id){
+          return item;
+      }
+  }
+  return null;
+}
+
+function askCategoryById(id){
+  for (const item of categories){
+      if (item.value == id){
           return item;
       }
   }
@@ -158,5 +168,6 @@ module.exports = {
   question,
   questionShowTitleComplexity,
   categories,
-  getDataById,
+  askQuestionById,
+  askCategoryById
 };

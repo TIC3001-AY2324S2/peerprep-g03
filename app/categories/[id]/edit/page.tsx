@@ -1,14 +1,13 @@
-import Form from '@/app/ui/questions/edit-form';
+import Form from '@/app/ui/categories/edit-form';
 import Breadcrumbs from '@/app/ui/questions/breadcrumbs';
 import { notFound} from 'next/navigation';
-import { categories } from '@/app/lib/placeholder-data';
-import { fetchQuestionById } from '@/app/lib/data';
+import { fetchCategoryById } from '@/app/lib/data';
  
 export default async function Page({params}:{params: {id: string}}) {
   const id = params.id;
-  const questions = await fetchQuestionById(id);
+  const categories = await fetchCategoryById(id);
 
-  if(!questions){
+  if(!categories){
     notFound();
   }
   
@@ -18,13 +17,13 @@ export default async function Page({params}:{params: {id: string}}) {
         breadcrumbs={[
           { label: 'Landing Page', href: '/' },
           {
-            label: 'Edit Question',
-            href: `/questions/${id}/edit`,
+            label: 'Edit Categories',
+            href: `/categories/${id}/edit`,
             active: true,
           },
         ]}
       />
-      <Form questions={questions} categories={categories}/>
+      <Form categories={categories}/>
     </main>
   );
 }

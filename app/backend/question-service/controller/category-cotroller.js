@@ -1,6 +1,6 @@
-import {question, askQuestionById} from '../../../lib/placeholder-data.js';
+import {categories, askCategoryById} from '../../../lib/placeholder-data.js';
 
-export async function createQuestion(req, res) {
+export async function createCategory(req, res) {
     try {
         console.log("Create question function call.");
         return res
@@ -11,7 +11,7 @@ export async function createQuestion(req, res) {
     }
 }
 
-export async function deleteQuestion(req, res) {
+export async function deleteCategory(req, res) {
     try {
         console.log("Delete question function call.");
         return res
@@ -22,18 +22,7 @@ export async function deleteQuestion(req, res) {
     }
 }
 
-export async function getQuestionByComplexity(req, res) {
-    try {
-        console.log("GetQuestionByComplexity function call.");
-        return res
-            .status(200)
-            .json({message: 'Get Question by complexity dummy successful!'});
-    } catch (error) {
-        
-    }
-}
-
-export async function updateQuestion(req, res) {
+export async function updateCategory(req, res) {
     try {
         console.log("updateQuestion function call.");
         return res
@@ -44,27 +33,27 @@ export async function updateQuestion(req, res) {
     }
 }
 
-export async function getQuestion(req, res) {
-
+export async function getCategories(req, res) {
+   
     try {
         console.log("getQuestion function call.");
         return res
             .status(200)
-            .json({message: question});
+            .json({message: categories});
     } catch (error) {
         
     }
 }
 
-export async function getQuestionById(req, res) {
+export async function getCategoryById(req, res) {
     const { id } = req.params;
    
-    const askQuestionById = askQuestionById(id);
+    const getcatById = askCategoryById(id);
     try {
         console.log("getQuestionById function call.");
         return res
             .status(200)
-            .json({message: askQuestionById});
+            .json({message: getcatById});
     } catch (error) {
         
     }
