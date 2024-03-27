@@ -3,15 +3,16 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function createQuestion (formData: FormData){
-    const rawFormData = {
-        title: formData.get('title'),
-        description: formData.get('description'),
-        category: formData.get('category'),
-        complexity: formData.get('complexity'),
-    }
-        
-    console.log(rawFormData);
+export async function createQuestion (rawFormData: {rawFormData: {
+    title: string;
+    description: string;
+    category: string;
+    complexity: string;
+}[]}){
+            
+    
+    // console.log(rawFormData);
+    
     // todo: createQuestion on server
 
     revalidatePath('/');

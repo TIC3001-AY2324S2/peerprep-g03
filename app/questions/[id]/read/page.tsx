@@ -3,16 +3,18 @@ import Breadcrumbs from '@/app/ui/questions/breadcrumbs';
 import { getDataById } from '@/app/lib/placeholder-data'; 
 // import { notFound} from 'next/navigation';
 import { categories } from '@/app/lib/placeholder-data';
+import { fetchQuestionById } from '@/app/lib/data';
+
  
 export default async function Page({params}:{params: {id: string}}) {
   const id = params.id;
-  const questionById = getDataById(id);
+  const questions = await fetchQuestionById(id);
   
   return (
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Questions', href: '/' },
+          { label: 'Landing Page', href: '/' },
           {
             label: 'Read Question',
             href: `/questions/${id}/read`,
@@ -20,7 +22,7 @@ export default async function Page({params}:{params: {id: string}}) {
           },
         ]}
       />
-      <Form questions={questionById} categories={categories}/>
+      <Form questions={questions} categories={categories}/>
     </main>
   );
 }

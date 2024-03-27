@@ -1,4 +1,4 @@
-import {question} from '../../../lib/placeholder-data.js';
+import {question, getDataById} from '../../../lib/placeholder-data.js';
 
 export async function createQuestion(req, res) {
     try {
@@ -56,7 +56,7 @@ export async function getQuestion(req, res) {
         console.log("getQuestion function call.");
         return res
             .status(200)
-            .json({question});
+            .json({message: question});
     } catch (error) {
         
     }
@@ -64,19 +64,13 @@ export async function getQuestion(req, res) {
 
 export async function getQuestionById(req, res) {
     const { id } = req.params;
-    function getDataById(){
-        for (const item of question){
-            if (item.id == id){
-                return item;
-            }
-        }
-        return null;
-    }
+   
+    const getQuestionById = getDataById(id);
     try {
         console.log("getQuestionById function call.");
         return res
             .status(200)
-            .json({message: getDataById()});
+            .json({message: getQuestionById});
     } catch (error) {
         
     }

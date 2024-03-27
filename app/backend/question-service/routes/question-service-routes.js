@@ -12,7 +12,7 @@ router.get("/complexity/", getQuestionByComplexity);
 
 router.get("/all/", getQuestion);
 
-router.get("/:id", getQuestionById);
+router.get("/:id/read", getQuestionById);
 
 router.patch("/", updateQuestion);
 

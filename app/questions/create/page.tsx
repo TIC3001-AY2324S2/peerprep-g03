@@ -8,7 +8,7 @@ export default async function Page() {
         <main>
             <Breadcrumbs
                 breadcrumbs={[
-                    {label: 'Questions', href: '/'},
+                    {label: 'Landing Page', href: '/'},
                     {
                         label: 'Create Question',
                         href: '/questions/create',

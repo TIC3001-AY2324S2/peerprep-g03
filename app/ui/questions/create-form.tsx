@@ -7,7 +7,7 @@ import {
   ChartPieIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import { createQuestion } from '@/app/lib/action';
 
@@ -23,13 +23,24 @@ export default function Form(
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const setHandle = (e) => {
-    setSelectedOptions(Array.isArray(e) ? e.map((hotel) => hotel.label) : []);
+    setSelectedOptions(Array.isArray(e) ? e.map((cat) => cat.label) : []);
   };
 
-  // const createQuestionWithSelectedOpt = createQuestion.bind(null, selectedOptions);
+  function handleFormAction(formData: FormData) {
+
+    const rawFormData = {
+      title: formData.get('title'),
+      description: formData.get('description'),
+      category: selectedOptions.join(", "),
+      complexity: formData.get('complexity'),
+    }
+    createQuestion(rawFormData);
+  }
+
+
 
   return (
-    <form action={createQuestion}> {/* todo: action={createQuestion} */}
+    <form action={handleFormAction}> {/* todo: action={createQuestion} */}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Title */}
         <div className="mb-4">
@@ -81,6 +92,7 @@ export default function Form(
                 options={categories} onChange={setHandle} isMulti required />
               <ChartPieIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
+            <div>{selectedOptions.join(", ")}</div>
           </div>
         </div>
 

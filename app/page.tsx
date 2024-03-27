@@ -7,7 +7,7 @@ import { fetchQuestions } from '@/app/lib/data';
 
 export default async function Page() {
 
-  const questions = await fetchQuestions();  
+  const questions = await fetchQuestions();
 
   return (
     <main className="flex min-h-screen flex-col p-6">
@@ -15,19 +15,22 @@ export default async function Page() {
         <PeerprepLogo />
       </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
+        <h1 className="text-[30px]">Landing Page</h1>
         <div className="flex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
+          <h1 className="text-[20px]">Catetories Table</h1>
           <div className='mt-4 flex items-center justify-between gap-2 md:mt-8'>
             <CreateCategory />
           </div>
           <CategoriesTable />
         </div>
         <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
+          <h1 className="text-[20px]">Question Table</h1>
           {/* Add Hero Images Here */}
           {/*<Search placeholder='Search questions...' />*/}
           <div className='mt-4 flex items-center justify-between gap-2 md:mt-8'>
             <CreateQuestion />
           </div>
-          <QuestionsTable questions={questions}/>
+          <QuestionsTable questions={questions} />
         </div>
       </div>
     </main>
