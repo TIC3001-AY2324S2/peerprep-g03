@@ -3,50 +3,23 @@
 import {
   QueueListIcon,
   DocumentTextIcon,
-  ChartPieIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
 import React, { useState, useEffect } from "react";
-import Select from "react-select";
-import { updateQuestion } from '@/app/lib/action';
+import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 
 export default function EditInvoiceForm(
   { questions, categories }: {
-    questions: {
-      id: string;
-      title: string;
-      description: string;
-      category: string;
-      complexity: string;
-    }[];
-    categories: {
-      id: string;
-      name: string
-    }[]
+    questions: QuestionsField[];
+    categories: CategoriesField[];
   }) {
 
-  const [selectedOptions, setSelectedOptions] = useState([]);
-
-  console.log(questions.category);
-
-  const currentQuestionCategories = questions.category.split(',');
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
-    // Find the category objects that match the category names
-    const defaultCategoryValues = categories.filter(category =>
-      currentQuestionCategories.includes(questions.category.name)
-    );
-
-    console.log(defaultCategoryValues);
-
-    // Set the default values for the Select component
-    setSelectedOptions(defaultCategoryValues);
-  }, [categories, currentQuestionCategories]);
-
-  // const setHandle = (e) => {
-  //   setSelectedOptions(Array.isArray(e) ? e.map((hotel) => hotel.label) : []);
-  // };
+    const defaultCategories = questions.category.split(', ').map(label => categories.find(category => category.label === label));
+    setSelectedCategories(defaultCategories);
+  }, []);
 
 
   return (
@@ -65,7 +38,7 @@ export default function EditInvoiceForm(
               defaultValue={questions.title}
               placeholder="Enter the title"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              required
+              disabled
             />
             <QueueListIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
           </div>
@@ -85,7 +58,7 @@ export default function EditInvoiceForm(
                 defaultValue={questions.description}
                 rows='10'
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                required
+                disabled
               />
               <DocumentTextIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -99,18 +72,21 @@ export default function EditInvoiceForm(
           </label>
           <div className="relative">
             <div className=" px-2	">
-              <Select
-                id="category"
-                name="categoryId"
-                className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                options={categories}
-                
-                value={selectedOptions}
-                defaultValue={selectedOptions}
-                isMulti
-                required
-              />
-              <ChartPieIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              {categories.map((category) =>
+                <div key={category.value}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      id="category"
+                      name="categoryId"
+                      value={category.value}
+                      checked={selectedCategories.some((selectedCategory) => selectedCategory.value === category.value)}
+                      disabled
+                    />
+                    {category.label}
+                  </label>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -130,7 +106,7 @@ export default function EditInvoiceForm(
                   value="easy"
                   defaultChecked={questions.complexity === 'easy'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
-                  required
+                  disabled
                 />
                 <label
                   htmlFor="easy"
@@ -147,6 +123,7 @@ export default function EditInvoiceForm(
                   value="medium"
                   defaultChecked={questions.complexity === 'medium'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  disabled
                 />
                 <label
                   htmlFor="medium"
@@ -163,6 +140,7 @@ export default function EditInvoiceForm(
                   value="hard"
                   defaultChecked={questions.complexity === 'hard'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                  disabled
                 />
                 <label
                   htmlFor="hard"
