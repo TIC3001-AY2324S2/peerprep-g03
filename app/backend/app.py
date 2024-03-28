@@ -11,7 +11,9 @@ app = Flask(__name__)
 cosmos_db_connection_string = os.getenv("COSMOS_DB_CONNECTION_STRING")
 client = MongoClient(cosmos_db_connection_string)
 db = client["peerprep_db"]
-collection = db["questions"]
+questions_collection = db["questions"]
+categories_collection = db["categories"]
+
 
 @app.route('/questions', methods=['GET'])
 def get_questions():
@@ -25,7 +27,7 @@ def get_questions():
         query['categories'] = {'$in': category.split(',')}
     
     # Fetch and return filtered questions
-    questions = list(collection.find(query, {'_id': 1, 'title': 1, 'complexity': 1, 'categories': 1}))
+    questions = list(questions_collection.find(query, {'_id': 1, 'title': 1, 'complexity': 1, 'categories': 1}))
     for question in questions:
         question['id'] = str(question['_id'])
         del question['_id']
@@ -35,7 +37,7 @@ def get_questions():
 def get_question(question_id):
     # Fetch a question by its ID
     try:
-        document = collection.find_one({"_id": ObjectId(question_id)}, {'_id': False})
+        document = questions_collection.find_one({"_id": ObjectId(question_id)}, {'_id': False})
         return jsonify(document if document else {"error": "Question not found"}), 200 if document else 404
     except Exception:
         return jsonify({"error": "Invalid ID format"}), 400
@@ -53,10 +55,10 @@ def add_question():
     data['title'] = data['title'].title()
 
     # Prevent duplicate entries
-    if collection.find_one({'title': data['title'], 'description': data['description']}):
+    if questions_collection.find_one({'title': data['title'], 'description': data['description']}):
         return jsonify({"error": "Question already exists"}), 409
 
-    result = collection.insert_one(data)
+    result = questions_collection.insert_one(data)
     data['id'] = str(result.inserted_id)
     del data['_id']
     return jsonify(data), 201
@@ -65,7 +67,7 @@ def add_question():
 def delete_question(question_id):
     # Delete a question by its ID
     try:
-        result = collection.delete_one({"_id": ObjectId(question_id)})
+        result = questions_collection.delete_one({"_id": ObjectId(question_id)})
         return jsonify({"message": "Question deleted successfully"} if result.deleted_count else {"error": "Question not found"}), 200 if result.deleted_count else 404
     except Exception:
         return jsonify({"error": "Invalid ID format"}), 400
@@ -74,12 +76,50 @@ def delete_question(question_id):
 def update_question(question_id):
     # Update a question by its ID
     try:
-        result = collection.update_one({"_id": ObjectId(question_id)}, {"$set": request.json})
+        result = questions_collection.update_one({"_id": ObjectId(question_id)}, {"$set": request.json})
         if result.matched_count == 0:
             return jsonify({"error": "Question not found"}), 404
         return jsonify({"message": "Question updated successfully"} if result.modified_count else {"message": "No changes detected"}), 200
     except Exception:
         return jsonify({"error": "Invalid ID format"}), 400
+    
+
+@app.route('/categories', methods=['GET'])
+def get_categories():
+    # Fetch and return all categories
+    all_categories = list(categories_collection.find({}, {'_id': 1, 'name': 1}))
+    for category in all_categories:
+        category['id'] = str(category['_id'])
+        del category['_id']
+    return jsonify(all_categories), 200
+
+@app.route('/categories', methods=['POST'])
+def add_category():
+    # Add a new category
+    data = request.json
+    # Validate data, ensure 'name' is present
+    if 'name' not in data:
+        return jsonify({"error": "Missing category name"}), 400
+
+    # Optionally check for duplicates
+    if categories_collection.find_one({'name': data['name']}):
+        return jsonify({"error": "Category already exists"}), 409
+
+    result = categories_collection.insert_one(data)
+    data['id'] = str(result.inserted_id)
+    del data['_id']
+    return jsonify(data), 201
+
+@app.route('/categories/<category_id>', methods=['DELETE'])
+def delete_category(category_id):
+    # Delete a category by its ID
+    try:
+        result = categories_collection.delete_one({"_id": ObjectId(category_id)})
+        return jsonify({"message": "Category deleted successfully"} if result.deleted_count else {"error": "Category not found"}), 200 if result.deleted_count else 404
+    except Exception:
+        return jsonify({"error": "Invalid ID format"}), 400
+    
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
