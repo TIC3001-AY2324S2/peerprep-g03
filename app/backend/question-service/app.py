@@ -30,6 +30,7 @@ def get_questions():
     questions = list(questions_collection.find(query, {'_id': 1, 'title': 1, 'complexity': 1, 'categories': 1}))
     for question in questions:
         question['id'] = str(question['_id'])
+        question['categories'] = ','.join(question['categories'])
         del question['_id']
     return jsonify(questions), 200
 
@@ -51,7 +52,7 @@ def add_question():
         return jsonify({"error": "Missing required fields", "missing": missing_fields}), 400
     
     data['complexity'] = data['complexity'].title()
-    data['categories'] = [category.title() for category in data['categories']]
+    data['categories'] = [category.strip().title() for category in data['categories'].split(",")]
     data['title'] = data['title'].title()
 
     # Prevent duplicate entries
@@ -75,8 +76,11 @@ def delete_question(question_id):
 @app.route('/questions/<question_id>', methods=['PATCH'])
 def update_question(question_id):
     # Update a question by its ID
+    data = request.json
+    if 'categories' in data:
+        data['categories'] = [category.strip().title() for category in data['categories'].split(",")]
     try:
-        result = questions_collection.update_one({"_id": ObjectId(question_id)}, {"$set": request.json})
+        result = questions_collection.update_one({"_id": ObjectId(question_id)}, {"$set": data})
         if result.matched_count == 0:
             return jsonify({"error": "Question not found"}), 404
         return jsonify({"message": "Question updated successfully"} if result.modified_count else {"message": "No changes detected"}), 200
@@ -87,9 +91,16 @@ def update_question(question_id):
 @app.route('/categories', methods=['GET'])
 def get_categories():
     # Fetch and return all categories
-    all_categories = list(categories_collection.find({}, {'_id': 1, 'name': 1}))
-    for category in all_categories:
-        category['id'] = str(category['_id'])
+    result = list(categories_collection.find({}, {'_id': 1, 'name': 1}))
+    all_categories = []
+    print(all_categories)
+    for category in result:
+        all_categories.append(
+            {
+              "value" : str(category['_id']),
+              "label": category["name"]   
+            }
+        )
         del category['_id']
     return jsonify(all_categories), 200
 
@@ -98,15 +109,15 @@ def add_category():
     # Add a new category
     data = request.json
     # Validate data, ensure 'name' is present
-    if 'name' not in data:
-        return jsonify({"error": "Missing category name"}), 400
+    if 'label' not in data:
+        return jsonify({"error": "Missing category label"}), 400
 
     # Optionally check for duplicates
-    if categories_collection.find_one({'name': data['name']}):
+    if categories_collection.find_one({'name': data['label']}):
         return jsonify({"error": "Category already exists"}), 409
 
-    result = categories_collection.insert_one(data)
-    data['id'] = str(result.inserted_id)
+    result = categories_collection.insert_one({"name": data["label"]})
+    data['value'] = str(result.inserted_id)
     del data['_id']
     return jsonify(data), 201
 
