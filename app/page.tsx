@@ -1,14 +1,20 @@
 import PeerprepLogo from '@/app/ui/peerprep-logo';
 import { CreateQuestion, CreateCategory } from '@/app/ui/questions/buttons';
 import Search from '@/app/ui/search';
-import { lusitana } from '@/app/ui/fonts';
 import { QuestionsTable, CategoriesTable } from '@/app/ui/questions/table';
 import { fetchQuestions, fetchCategories } from '@/app/lib/data';
+import { notFound } from 'next/navigation';
+
 
 export default async function Page() {
+  try {
+    const questions = await fetchQuestions();
+    const categories = await fetchCategories();
+  } catch (error) {
+    notFound();
+  }
 
-  const questions = await fetchQuestions();
-  const categories = await fetchCategories();
+
 
   return (
     <main className="flex min-h-screen flex-col p-6">

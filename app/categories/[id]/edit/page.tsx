@@ -1,6 +1,6 @@
 import Form from '@/app/ui/categories/edit-form';
 import Breadcrumbs from '@/app/ui/questions/breadcrumbs';
-import { notFound} from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { fetchCategoryById } from '@/app/lib/data';
  
 export default async function Page({params}:{params: {id: string}}) {
