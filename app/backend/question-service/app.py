@@ -30,7 +30,7 @@ def get_questions():
     questions = list(questions_collection.find(query, {'_id': 1, 'title': 1, 'complexity': 1, 'categories': 1}))
     for question in questions:
         question['id'] = str(question['_id'])
-        question['categories'] = ','.join(question['categories'])
+        question['categories'] = ', '.join(question['categories'])
         del question['_id']
     return jsonify(questions), 200
 
@@ -44,7 +44,7 @@ def get_question(question_id):
     if not document:
         return jsonify({"error": "Question not found"}), 404
     else:
-        document["categories"] = ",".join(document["categories"])
+        document["categories"] = ", ".join(document["categories"])
         document['id'] = str(document['_id'])
         del document['_id']
         return jsonify(document), 200
