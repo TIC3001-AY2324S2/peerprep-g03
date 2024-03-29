@@ -9,7 +9,7 @@ import { fetchQuestionById } from '@/app/lib/data';
 export default async function Page({params}:{params: {id: string}}) {
   const id = params.id;
   const questions = await fetchQuestionById(id);
-
+  console.log(questions);
   if(!questions){
     notFound();
   }

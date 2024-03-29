@@ -8,7 +8,7 @@ import Link from 'next/link';
 import React, { useState, useEffect } from "react";
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 
-export default function EditInvoiceForm(
+export default function EditQuestionForm(
   { questions, categories }: {
     questions: QuestionsField[];
     categories: CategoriesField[];
@@ -34,7 +34,7 @@ export default function EditInvoiceForm(
           </label>
           <div className="relative">
             <input
-              id="titl"
+              id="title"
               name="title"
               type="string"
               defaultValue={questions.title}

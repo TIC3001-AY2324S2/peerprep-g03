@@ -24,7 +24,7 @@ export async function fetchQuestionById(id: string) {
     try {
         const response = await axios.get(`http://localhost:5000/questions/${id}`);
         const resultById = response.data;
-        console.log(resultById);
+        // console.log(resultById);
         return resultById; // This will be your JSON response
     } catch (err) {
         console.error('Database Error:', err);
