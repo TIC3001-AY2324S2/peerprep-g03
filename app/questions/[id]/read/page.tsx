@@ -1,19 +1,28 @@
 import Form from '@/app/ui/questions/read-form';
 import Breadcrumbs from '@/app/ui/questions/breadcrumbs';
-import { getDataById } from '@/app/lib/placeholder-data'; 
-import { notFound} from 'next/navigation';
-import { categories } from '@/app/lib/placeholder-data';
-import { fetchQuestionById } from '@/app/lib/data';
+import { getDataById } from '@/app/lib/placeholder-data';
+import { notFound } from 'next/navigation';
+// import { categories } from '@/app/lib/placeholder-data';
+import { fetchQuestionById, fetchCategories } from '@/app/lib/data';
 
- 
-export default async function Page({params}:{params: {id: string}}) {
+
+export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
-  const questions = await fetchQuestionById(id);
-  console.log(questions);
-  if(!questions){
+
+  let questions;
+  let categories;
+
+  try {
+    questions = await fetchQuestionById(id);
+    categories = await fetchCategories();
+  } catch (error) {
     notFound();
   }
-  
+
+  // console.log(questions);
+  // console.log(categories);
+
+
   return (
     <main>
       <Breadcrumbs
@@ -26,7 +35,7 @@ export default async function Page({params}:{params: {id: string}}) {
           },
         ]}
       />
-      <Form questions={questions} categories={categories}/>
+      <Form questions={questions} categories={categories} />
     </main>
   );
 }

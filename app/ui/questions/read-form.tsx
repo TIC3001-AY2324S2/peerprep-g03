@@ -16,12 +16,15 @@ export default function EditQuestionForm(
 
   // State to keep track of selected categories
   const [selectedCategories, setSelectedCategories] = useState([]);
+  console.log('questions: ', questions );
+  console.log('categories: ', categories );
 
   // Effect to pre-select checkboxes based on questions.category
   useEffect(() => {
-    const defaultCategories = questions.category.split(', ').map(label => categories.find(category => category.label === label));
-    setSelectedCategories(defaultCategories);
+    const defaultCategories = questions.categories.split(', ').map(label => categories.find(category => category.label === label));
+    setSelectedCategories(defaultCategories);    
   }, []);
+  console.log(defaultCategories);
 
 
   return (
