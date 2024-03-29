@@ -38,13 +38,15 @@ def get_questions():
 def get_question(question_id):
     # Fetch a question by its ID
     try:
-        document = questions_collection.find_one({"_id": ObjectId(question_id)}, {'_id': False})
+        document = questions_collection.find_one({"_id": ObjectId(question_id)})
     except Exception:
         return jsonify({"error": "Invalid ID format"}), 400
     if not document:
         return jsonify({"error": "Question not found"}), 404
     else:
         document["categories"] = ",".join(document["categories"])
+        document['id'] = str(document['_id'])
+        del document['_id']
         return jsonify(document), 200
 
 @app.route('/questions', methods=['POST'])
@@ -135,7 +137,7 @@ def delete_category(category_id):
     
 @app.route('/categories/<category_id>', methods=['GET'])
 def get_category(category_id):
-    # Fetch a question by its ID
+    # Fetch a category by its ID
     try:
         result = categories_collection.find_one({"_id": ObjectId(category_id)})
     except Exception:
@@ -143,9 +145,11 @@ def get_category(category_id):
     if not result:
         return jsonify({"error": "Category not found"}), 404
     else:
-        result['id'] = str(result['_id'] )
-        del result['_id']
-        return jsonify(result), 200
+        return(jsonify({
+            "value": str(result['_id']),
+            'label': result['name']
+        })
+        ), 200
     
 
 if __name__ == '__main__':
