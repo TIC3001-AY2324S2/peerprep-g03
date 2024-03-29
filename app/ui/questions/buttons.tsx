@@ -60,7 +60,7 @@ export function ReadQuestion({ id }: { id: string }) {
 }
 
 export function DeleteQuestion({ id }: { id: string }) {
-  const deleteQuestionWithId = deleteCategory.bind(null, id);
+  const deleteQuestionWithId = deleteQuestion.bind(null, id);
   return (
     <form action={deleteQuestionWithId}>
       <button className="rounded-md border p-2 hover:bg-gray-100">
@@ -71,8 +71,8 @@ export function DeleteQuestion({ id }: { id: string }) {
   );
 }
 
-export function DeleteCatetory({ id }: { id: string }) {
-  const deleteCategoryWithId = deleteQuestion.bind(null, id);
+export function DeleteCatetory({ id }: { id: string }) {  
+  const deleteCategoryWithId = deleteCategory.bind(null, id);
   return (
     <form action={deleteCategoryWithId}>
       <button className="rounded-md border p-2 hover:bg-gray-100">

@@ -124,7 +124,7 @@ export async function CategoriesTable({ categories }: { categories: CategoriesFi
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       <UpdateCategory id={category.value} />
-                      <DeleteQuestion id={category.value} />
+                      <DeleteCatetory id={category.value} />
                     </div>
                   </td>
                 </tr>
