@@ -16,7 +16,7 @@ export async function createQuestion(rawFormData: {
 
     try {
         const json = JSON.stringify(rawFormData);
-        const url = 'http://localhost:5000/questions';
+        const url = 'http://127.0.0.1:5000/questions';
         const response = await axios.post(url, json, {
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header
@@ -34,7 +34,7 @@ export async function createCategories(formData: FormData) {
 
     try {
         const json = JSON.stringify(formData);
-        const url = 'http://localhost:5000/categories';
+        const url = 'http://127.0.0.1:5000/categories';
         const response = await axios.post(url, json, {
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header
@@ -69,7 +69,7 @@ export async function updateCategory(rawFormData: QuestionsField[]) {
 
 export async function deleteQuestion(id: string) {
     try {
-        const response = await axios.delete(`http://localhost:5000/questions/${id}`);
+        const response = await axios.delete(`http://127.0.0.1:5000/questions/${id}`);
         console.log(response.data);
         revalidatePath('/');
     } catch (err) {
@@ -80,7 +80,7 @@ export async function deleteQuestion(id: string) {
 
 export async function deleteCategory(id: string) {
     try {
-        const response = await axios.delete(`http://localhost:5000/categories/${id}`);
+        const response = await axios.delete(`http://127.0.0.1:5000/categories/${id}`);
         // console.log(response.data);
         revalidatePath('/');
     } catch (err) {

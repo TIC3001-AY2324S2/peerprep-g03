@@ -97,14 +97,14 @@ def update_question(question_id):
 @app.route('/categories', methods=['GET'])
 def get_categories():
     # Fetch and return all categories
-    result = list(categories_collection.find({}, {'_id': 1, 'name': 1}))
+    result = list(categories_collection.find({}, {'_id': 1, 'label': 1}))
     all_categories = []
     print(all_categories)
     for category in result:
         all_categories.append(
             {
               "value" : str(category['_id']),
-              "label": category["name"]   
+              "label": category["label"].title()   
             }
         )
         del category['_id']
@@ -119,18 +119,23 @@ def add_category():
         return jsonify({"error": "Missing category label"}), 400
 
     # Optionally check for duplicates
-    if categories_collection.find_one({'name': data['label']}):
+    if categories_collection.find_one({'label': data['label']}):
         return jsonify({"error": "Category already exists"}), 409
+    
+    latest_id = categories_collection.find_one(sort=[("_id", -1)])
+    next_id = latest_id['_id'] + 1 if latest_id else 1
 
-    result = categories_collection.insert_one({"name": data["label"]})
-    data['value'] = str(result.inserted_id)
-    return jsonify(data), 201
+    result = categories_collection.insert_one({"_id": next_id, "label": data["label"]})
+    return jsonify(
+        {"value": result.inserted_id,
+         "label": data['label']
+        }), 201
 
 @app.route('/categories/<category_id>', methods=['DELETE'])
 def delete_category(category_id):
     # Delete a category by its ID
     try:
-        result = categories_collection.delete_one({"_id": ObjectId(category_id)})
+        result = categories_collection.delete_one({"_id": int(category_id)})
         return jsonify({"message": "Category deleted successfully"} if result.deleted_count else {"error": "Category not found"}), 200 if result.deleted_count else 404
     except Exception:
         return jsonify({"error": "Invalid ID format"}), 400
@@ -139,7 +144,7 @@ def delete_category(category_id):
 def get_category(category_id):
     # Fetch a category by its ID
     try:
-        result = categories_collection.find_one({"_id": ObjectId(category_id)})
+        result = categories_collection.find_one({"_id": int(category_id)})
     except Exception:
         return jsonify({"error": "Invalid ID format"}), 400
     if not result:
@@ -147,9 +152,11 @@ def get_category(category_id):
     else:
         return(jsonify({
             "value": str(result['_id']),
-            'label': result['name']
+            'label': result['label']
         })
         ), 200
+        
+
     
 
 if __name__ == '__main__':
