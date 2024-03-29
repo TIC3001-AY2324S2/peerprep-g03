@@ -16,14 +16,13 @@ export async function createQuestion(rawFormData: {
 
     console.log(JSON.stringify(rawFormData));
 
-    // todo: createQuestion on server
 
     revalidatePath('/');
     redirect('/');
 }
 
 export async function createCategories(formData: FormData) {
-    
+
     try {
         const json = JSON.stringify(formData);
         const url = 'http://localhost:5000/categories';
@@ -32,12 +31,10 @@ export async function createCategories(formData: FormData) {
                 'Content-Type': 'application/json', // Set the Content-Type header
             },
         });
-        console.log('Response data:', response.data);
-
+        console.log('Response data:', response.data);       
     } catch (error) {
-        console.error('Error making POST request:', error.message);
+        console.error('Error making POST request:', error.message);        
     }
-
     revalidatePath('/');
     redirect('/');
 }

@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createCategories } from '@/app/lib/action';
+import { notFound } from 'next/navigation';
 
 
 
@@ -15,7 +16,13 @@ export default function Form() {
     const rawFormData = {
       label: formData.get('category'),
     }
-    createCategories(rawFormData);
+    try {
+      createCategories(rawFormData);
+    } catch (error) {
+      console.log("I come here");
+      notFound();
+    }
+    
   }
   
   return (
