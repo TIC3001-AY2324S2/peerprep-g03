@@ -14,9 +14,18 @@ export async function createQuestion(rawFormData: {
     }[]
 }) {
 
-    console.log(JSON.stringify(rawFormData));
-
-
+    try {
+        const json = JSON.stringify(rawFormData);
+        const url = 'http://localhost:5000/questions';
+        const response = await axios.post(url, json, {
+            headers: {
+                'Content-Type': 'application/json', // Set the Content-Type header
+            },
+        });
+        console.log('Response data:', response.data);
+    } catch (error) {
+        console.error('Failed to Create the questions:', error.message);
+    }
     revalidatePath('/');
     redirect('/');
 }
@@ -31,9 +40,9 @@ export async function createCategories(formData: FormData) {
                 'Content-Type': 'application/json', // Set the Content-Type header
             },
         });
-        console.log('Response data:', response.data);       
+        console.log('Response data:', response.data);
     } catch (error) {
-        console.error('Error making POST request:', error.message);        
+        console.error('Failed to Create the category:', error.message);
     }
     revalidatePath('/');
     redirect('/');
