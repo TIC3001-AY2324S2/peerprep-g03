@@ -22,21 +22,21 @@ export async function createQuestion(rawFormData: {
     redirect('/');
 }
 
-export async function createCategories(formData: FormData) {    
-    const json = JSON.stringify(formData);
-    const url = `http://localhost:5000/categories`;
-    axios.post(url, json, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((response) => {
-            console.log('Response data: ', response.data.data);
-            console.log('Content-Type:', response.data.headers['Content-Type']);
-        })
-        .catch((error) => {
-            console.error('Error making POST request: ', error.message);
+export async function createCategories(formData: FormData) {
+    
+    try {
+        const json = JSON.stringify(formData);
+        const url = 'http://localhost:5000/categories';
+        const response = await axios.post(url, json, {
+            headers: {
+                'Content-Type': 'application/json', // Set the Content-Type header
+            },
         });
+        console.log('Response data:', response.data);
+
+    } catch (error) {
+        console.error('Error making POST request:', error.message);
+    }
 
     revalidatePath('/');
     redirect('/');
@@ -72,11 +72,11 @@ export async function deleteQuestion(id: string) {
     }
 }
 
-export async function deleteCategory(id: string) {    
+export async function deleteCategory(id: string) {
     try {
         const response = await axios.delete(`http://localhost:5000/categories/${id}`);
         // console.log(response.data);
-        revalidatePath('/');        
+        revalidatePath('/');
     } catch (err) {
         console.error('Database Error:', err);
         throw new Error('Failed to delete the category.');
