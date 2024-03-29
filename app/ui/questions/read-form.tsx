@@ -8,7 +8,7 @@ import Link from 'next/link';
 import React, { useState, useEffect } from "react";
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 
-export default function EditQuestionForm(
+export default function ReadForm(
   { questions, categories }: {
     questions: QuestionsField[];
     categories: CategoriesField[];
@@ -106,7 +106,7 @@ export default function EditQuestionForm(
                   name="complexity"
                   type="radio"
                   value="easy"
-                  defaultChecked={questions.complexity === 'easy'}
+                  defaultChecked={questions.complexity.toLowerCase() === 'easy'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   disabled
                 />
@@ -123,7 +123,7 @@ export default function EditQuestionForm(
                   name="complexity"
                   type="radio"
                   value="medium"
-                  defaultChecked={questions.complexity === 'medium'}
+                  defaultChecked={questions.complexity.toLowerCase() === 'medium'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   disabled
                 />
@@ -140,7 +140,7 @@ export default function EditQuestionForm(
                   name="complexity"
                   type="radio"
                   value="hard"
-                  defaultChecked={questions.complexity === 'hard'}
+                  defaultChecked={questions.complexity.toLowerCase() === 'hard'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   disabled
                 />

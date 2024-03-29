@@ -9,19 +9,12 @@ import { fetchQuestionById, fetchCategories } from '@/app/lib/data';
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
 
-  let questions;
-  let categories;
+  const questions = await fetchQuestionById(id);
+  const categories = await fetchCategories();
 
-  try {
-    questions = await fetchQuestionById(id);
-    categories = await fetchCategories();
-  } catch (error) {
+  if (!questions || !categories) {
     notFound();
   }
-
-  // console.log(questions);
-  // console.log(categories);
-
 
   return (
     <main>

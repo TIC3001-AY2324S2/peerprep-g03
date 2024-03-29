@@ -1,14 +1,16 @@
 import Form from '@/app/ui/questions/edit-form';
 import Breadcrumbs from '@/app/ui/questions/breadcrumbs';
 import { notFound} from 'next/navigation';
-import { categories } from '@/app/lib/placeholder-data';
-import { fetchQuestionById } from '@/app/lib/data';
+// import { categories } from '@/app/lib/placeholder-data';
+import { fetchQuestionById, fetchCategories } from '@/app/lib/data';
  
 export default async function Page({params}:{params: {id: string}}) {
   const id = params.id;
+  
   const questions = await fetchQuestionById(id);
+  const categories = await fetchCategories();
 
-  if(!questions){
+  if(!questions || !categories){
     notFound();
   }
   

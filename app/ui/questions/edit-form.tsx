@@ -10,7 +10,7 @@ import React, { useState, useEffect } from "react";
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 import { updateQuestion } from '@/app/lib/action';
 
-export default function EditInvoiceForm(
+export default function EditForm(
   { questions, categories }: {
     questions: QuestionsField[];
     categories: CategoriesField[];
@@ -32,7 +32,7 @@ export default function EditInvoiceForm(
 
   // Effect to pre-select checkboxes based on questions.category
   useEffect(() => {
-    const defaultCategories = questions.category.split(', ').map(label => categories.find(category => category.label === label));
+    const defaultCategories = questions.categories.split(', ').map(label => categories.find(category => category.label.toLowerCase() === label.toLowerCase()));
     setSelectedCategories(defaultCategories);
   }, []);
 
@@ -135,7 +135,7 @@ export default function EditInvoiceForm(
                   name="complexity"
                   type="radio"
                   value="easy"
-                  defaultChecked={questions.complexity === 'easy'}
+                  defaultChecked={questions.complexity.toLowerCase() === 'easy'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   required
                 />
@@ -152,7 +152,7 @@ export default function EditInvoiceForm(
                   name="complexity"
                   type="radio"
                   value="medium"
-                  defaultChecked={questions.complexity === 'medium'}
+                  defaultChecked={questions.complexity.toLowerCase() === 'medium'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label
@@ -168,7 +168,7 @@ export default function EditInvoiceForm(
                   name="complexity"
                   type="radio"
                   value="hard"
-                  defaultChecked={questions.complexity === 'hard'}
+                  defaultChecked={questions.complexity.toLowerCase() === 'hard'}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                 />
                 <label

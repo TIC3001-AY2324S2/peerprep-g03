@@ -7,25 +7,25 @@ export default function QuestionComplexity({ complexity }: { complexity: string 
       className={clsx(
         'inline-flex items-center rounded-full px-2 py-1 text-xs',
         {
-          'bg-green-500 text-white': complexity === 'easy',
-          'bg-orange-500 text-white': complexity === 'medium',
-          'bg-red-500 text-white': complexity === 'hard',
+          'bg-green-500 text-white': complexity.toLowerCase() === 'easy',
+          'bg-orange-500 text-white': complexity.toLowerCase() === 'medium',
+          'bg-red-500 text-white': complexity.toLowerCase() === 'hard',
         },
       )}
     >
-      {complexity === 'easy' ? (
+      {complexity.toLowerCase() === 'easy' ? (
         <>
           Easy
           <AcademicCapIcon className="ml-1 w-4 text-white" />
         </>
       ) : null}
-      {complexity === 'medium' ? (
+      {complexity.toLowerCase() === 'medium' ? (
         <>
           Medium
           <AcademicCapIcon className="ml-1 w-4 text-white" />
         </>
       ) : null}
-      {complexity === 'hard' ? (
+      {complexity.toLowerCase() === 'hard' ? (
         <>
           Hard
           <AcademicCapIcon className="ml-1 w-4 text-white" />
