@@ -10,7 +10,7 @@ import React, { useState, useEffect } from "react";
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 import { updateQuestion } from '@/app/lib/action';
 
-export default function EditInvoiceForm(
+export default function EditCategoryForm(
   { categories }: {
   categories: CategoriesField[];
 }) {

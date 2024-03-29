@@ -35,7 +35,7 @@ export async function fetchQuestionById(id: string) {
 export async function fetchCategoryById(id: string) {
     try {
         const response = await axios.get(`http://localhost:5000/categories/${id}`);
-        const resultById = response.data.message;
+        const resultById = response.data;
         return resultById; // This will be your JSON response
     } catch (err) {
         console.error('Database Error:', err);

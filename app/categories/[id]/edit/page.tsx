@@ -6,7 +6,7 @@ import { fetchCategoryById } from '@/app/lib/data';
 export default async function Page({params}:{params: {id: string}}) {
   const id = params.id;
   const categories = await fetchCategoryById(id);
-
+  
   if(!categories){
     notFound();
   }

@@ -16,13 +16,11 @@ export default function EditQuestionForm(
 
   // State to keep track of selected categories
   const [selectedCategories, setSelectedCategories] = useState([]);
-  console.log('questions: ', questions );
-  console.log('categories: ', categories );
 
   // Effect to pre-select checkboxes based on questions.category
   useEffect(() => {
-    const defaultCategories = questions.categories.split(', ').map(label => categories.find(category => category.label === label));
-    setSelectedCategories(defaultCategories);    
+    const defaultCategories = questions.categories.split(', ').map(label => categories.find(category => category.label.toLowerCase() === label.toLowerCase()));
+    setSelectedCategories(defaultCategories);
   }, []);
 
 
@@ -87,7 +85,7 @@ export default function EditQuestionForm(
                       checked={selectedCategories.some((selectedCategory) => selectedCategory.value === category.value)}
                       disabled
                     />
-                    {category.label}
+                    {category.label}                    
                   </label>
                 </div>
               )}
