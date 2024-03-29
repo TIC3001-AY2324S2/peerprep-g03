@@ -5,13 +5,21 @@ import {
   QueueListIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
+import { createCategories } from '@/app/lib/action';
+
 
 
 export default function Form() {
 
+  function handleFormAction(formData: FormData) {
+    const rawFormData = {
+      label: formData.get('category'),
+    }
+    createCategories(rawFormData);
+  }
   
   return (
-    <form > {/* todo: action={createQuestion} */}
+    <form action={handleFormAction}> {/* todo: action={createQuestion} */}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Category */}
         <div className="mb-4">

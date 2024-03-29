@@ -7,14 +7,15 @@ import { notFound } from 'next/navigation';
 
 
 export default async function Page() {
+  let questions;
+  let categories;
   try {
-    const questions = await fetchQuestions();
-    const categories = await fetchCategories();
+    questions = await fetchQuestions();
+    categories = await fetchCategories();
+    
   } catch (error) {
     notFound();
   }
-
-
 
   return (
     <main className="flex min-h-screen flex-col p-6">

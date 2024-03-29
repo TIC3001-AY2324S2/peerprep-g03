@@ -28,7 +28,7 @@ export default function Form(
     const rawFormData = {
       title: formData.get('title'),
       description: formData.get('description'),
-      category: selectedOptions.join(", "),
+      categories: selectedOptions.join(", "),
       complexity: formData.get('complexity'),
     }
     createQuestion(rawFormData);

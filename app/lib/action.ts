@@ -7,12 +7,21 @@ import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 export async function createQuestion (rawFormData: {rawFormData: {
     title: string;
     description: string;
-    category: string;
+    categories: string;
     complexity: string;
 }[]}){
-            
+                
+    console.log(JSON.stringify(rawFormData));
     
-    // console.log(rawFormData);
+    // todo: createQuestion on server
+
+    revalidatePath('/');
+    redirect('/');        
+}
+
+export async function createCategories (formData:FormData){
+                
+    console.log(JSON.stringify(formData));
     
     // todo: createQuestion on server
 
