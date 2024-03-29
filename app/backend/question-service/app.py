@@ -118,7 +118,6 @@ def add_category():
 
     result = categories_collection.insert_one({"name": data["label"]})
     data['value'] = str(result.inserted_id)
-    del data['_id']
     return jsonify(data), 201
 
 @app.route('/categories/<category_id>', methods=['DELETE'])
