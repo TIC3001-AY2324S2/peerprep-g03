@@ -1,4 +1,4 @@
-import { UpdateQuestion, DeleteQuestion, ReadQuestion, UpdateCategory } from '@/app/ui/questions/buttons';
+import { UpdateQuestion, DeleteQuestion, ReadQuestion, UpdateCategory, DeleteCatetory } from '@/app/ui/questions/buttons';
 import QuestionComplexity from '@/app/ui/questions/complexity';
 import { QuestionsField, CategoriesField } from '@/app/lib/definitions';
 
@@ -96,7 +96,7 @@ export async function CategoriesTable({ categories }: { categories: CategoriesFi
                 <div className="flex w-full items-center justify-between pt-4">
                   <div className="flex justify-end gap-2">
                     <UpdateCategory id={category.value} />
-                    <DeleteQuestion id={category.value} />
+                    <DeleteCatetory id={category.value} />
                   </div>
                 </div>
               </div>
