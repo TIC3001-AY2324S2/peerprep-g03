@@ -24,7 +24,6 @@ export default function EditQuestionForm(
     const defaultCategories = questions.categories.split(', ').map(label => categories.find(category => category.label === label));
     setSelectedCategories(defaultCategories);    
   }, []);
-  console.log(defaultCategories);
 
 
   return (
