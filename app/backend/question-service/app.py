@@ -97,9 +97,11 @@ def update_question(question_id):
     if 'categories' in data:
         data['categories'] = [category.strip().title() for category in data['categories'].split(",")]
     try:
+        print(question_id)
+        print(f"type: {type(question_id)}")
         obj_id = ObjectId(question_id)
     except InvalidId:
-        return jsonify({"error": "Invalid ID format"})
+        return jsonify({"error": "Invalid ID format"}), 400
     try:
         result = questions_collection.update_one({"_id": obj_id}, {"$set": data})
         if result.matched_count == 0:

@@ -15,7 +15,7 @@ export async function createQuestion(rawFormData: {
 }) {
 
     try {
-        const json = JSON.stringify(rawFormData);
+        const json = JSON.stringify([rawFormData]);
         const url = 'http://127.0.0.1:5000/questions';
         const response = await axios.post(url, json, {
             headers: {
