@@ -8,15 +8,29 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import React, { useState, useEffect } from "react";
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
-import { updateQuestion } from '@/app/lib/action';
+import { updateCategory } from '@/app/lib/action';
+import { notFound } from 'next/navigation';
 
 export default function EditCategoryForm(
   { categories }: {
   categories: CategoriesField[];
 }) {
 
+  function handleFormAction(formData: FormData) {
+    const rawFormData = {
+      label: formData.get('category'),
+      value: categories.value,
+    }
+    
+    try {
+      updateCategory(rawFormData);
+    } catch (error) {      
+      notFound();
+    }    
+  }
+
   return (
-    <form> {/*action={updateQuestionWithId}*/}
+    <form action={handleFormAction}> {/*action={updateQuestionWithId}*/}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Category */}
         <div className="mb-4">

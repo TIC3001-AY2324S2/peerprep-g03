@@ -18,8 +18,7 @@ export default function Form() {
     }
     try {
       createCategories(rawFormData);
-    } catch (error) {
-      console.log("I come here");
+    } catch (error) {      
       notFound();
     }
     

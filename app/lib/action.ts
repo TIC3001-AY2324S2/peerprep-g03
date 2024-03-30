@@ -31,7 +31,6 @@ export async function createQuestion(rawFormData: {
 }
 
 export async function createCategories(formData: FormData) {
-
     try {
         const json = JSON.stringify(formData);
         const url = 'http://127.0.0.1:5000/categories';
@@ -49,7 +48,7 @@ export async function createCategories(formData: FormData) {
 }
 
 
-export async function updateQuestion(rawFormData: QuestionsField[]) {
+export async function updateQuestion(rawFormData: FormData[]) {
 
     console.log(rawFormData);
     // todo: updateQuestion on server
@@ -58,13 +57,29 @@ export async function updateQuestion(rawFormData: QuestionsField[]) {
     redirect('/');
 }
 
-export async function updateCategory(rawFormData: QuestionsField[]) {
+export async function updateCategory(rawFormData: {
+    rawFormData: {
+        label: string;
+        value: string;
+    }[]
+}) {
 
-    console.log(rawFormData);
-    // todo: updateQuestion on server
-
+    try {
+        const json = JSON.stringify(rawFormData);
+        const id = rawFormData.value;
+        const url = `http://127.0.0.1:5000/categories/${id}`;
+        const response = await axios.patch(url, json, {
+            headers: {
+                'Content-Type': 'application/json', // Set the Content-Type header
+            },
+        });
+        console.log('Response data:', response.data);
+    } catch (error) {
+        console.error('Failed to Create the category:', error.message);
+    }
     revalidatePath('/');
     redirect('/');
+
 }
 
 export async function deleteQuestion(id: string) {
