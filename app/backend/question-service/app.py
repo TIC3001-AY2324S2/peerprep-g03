@@ -57,23 +57,29 @@ def get_question(question_id):
 @app.route('/questions', methods=['POST'])
 def add_question():
     data = request.json
-    required_fields = ['complexity', 'categories', 'title', 'description']
-    missing_fields = [field for field in required_fields if field not in data]
-    if missing_fields:
-        return jsonify({"error": "Missing required fields", "missing": missing_fields}), 400
+    added_questions = []
+    errors = []
+    for question in data:
+        required_fields = ['complexity', 'categories', 'title', 'description']
+        missing_fields = [field for field in required_fields if field not in question]
+        if missing_fields:
+            errors.append({"error": "Missing required fields", "missing": missing_fields, "question": question})
+            continue
+        
+        question['complexity'] = question['complexity'].title()
+        question['categories'] = [category.strip().title() for category in question['categories'].split(",")]
+        question['title'] = question['title'].title()
+
+        # Prevent duplicate entries
+        if not questions_collection.find_one({'title': question['title'], 'description': question['description']}):
+            result = questions_collection.insert_one(question)
+            question['id'] = str(result.inserted_id)
+            del question['_id']
+            added_questions.append(question)
+        else:
+             errors.append({"error": "Question already exists", "question": question}) 
     
-    data['complexity'] = data['complexity'].title()
-    data['categories'] = [category.strip().title() for category in data['categories'].split(",")]
-    data['title'] = data['title'].title()
-
-    # Prevent duplicate entries
-    if questions_collection.find_one({'title': data['title'], 'description': data['description']}):
-        return jsonify({"error": "Question already exists"}), 409
-
-    result = questions_collection.insert_one(data)
-    data['id'] = str(result.inserted_id)
-    del data['_id']
-    return jsonify(data), 201
+    return jsonify({"added_questions": added_questions, "errors": errors}), 201 if added_questions else 400
 
 @app.route('/questions/<question_id>', methods=['DELETE'])
 def delete_question(question_id):
