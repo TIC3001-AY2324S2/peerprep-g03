@@ -42,14 +42,14 @@ export default function EditForm(
 
 
   function handleFormAction(formData: FormData) {
+    const id = questions.id;
     const rawFormData = {
-      id: questions.id,
       title: formData.get('title'),
       description: formData.get('description'),
       category: getSelectedLabels().join(", "),
       complexity: formData.get('complexity'),
     }
-    updateQuestion(rawFormData);
+    updateQuestion(rawFormData, id);
   }
 
   return (

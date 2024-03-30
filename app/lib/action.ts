@@ -48,11 +48,20 @@ export async function createCategories(formData: FormData) {
 }
 
 
-export async function updateQuestion(rawFormData: FormData[]) {
-
-    console.log(rawFormData);
-    // todo: updateQuestion on server
-
+export async function updateQuestion(rawFormData, id: { rawFormData: FormData[], id: string}) {
+    try {
+        const json = JSON.stringify(rawFormData);
+        const id = id;
+        const url = `http://127.0.0.1:5000/questions/${id}`;
+        const response = await axios.patch(url, json, {
+            headers: {
+                'Content-Type': 'application/json', // Set the Content-Type header
+            },
+        });
+        console.log('Response data:', response.data);
+    } catch (error) {
+        console.error('Failed to Create the category:', error.message);
+    }
     revalidatePath('/');
     redirect('/');
 }
@@ -66,6 +75,7 @@ export async function updateCategory(rawFormData: {
 
     try {
         const json = JSON.stringify(rawFormData);
+        console.log(rawFormData);
         const id = rawFormData.value;
         const url = `http://127.0.0.1:5000/categories/${id}`;
         const response = await axios.patch(url, json, {
