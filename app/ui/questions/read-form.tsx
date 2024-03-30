@@ -7,6 +7,7 @@ import {
 import Link from 'next/link';
 import React, { useState, useEffect } from "react";
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
+import { preSelectCheckbox } from '@/app/lib/func';
 
 export default function ReadForm(
   { questions, categories }: {
@@ -19,8 +20,7 @@ export default function ReadForm(
 
   // Effect to pre-select checkboxes based on questions.category
   useEffect(() => {
-    const defaultCategories = questions.categories.split(', ').map(label => categories.find(category => category.label.toLowerCase() === label.toLowerCase()));
-    setSelectedCategories(defaultCategories);
+    preSelectCheckbox(questions, categories, setSelectedCategories);
   }, []);
 
 
@@ -85,7 +85,7 @@ export default function ReadForm(
                       checked={selectedCategories.some((selectedCategory) => selectedCategory.value === category.value)}
                       disabled
                     />
-                    {category.label}                    
+                    {category.label}
                   </label>
                 </div>
               )}

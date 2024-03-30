@@ -9,6 +9,7 @@ import { Button } from '@/app/ui/button';
 import React, { useState, useEffect } from "react";
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 import { updateQuestion } from '@/app/lib/action';
+import { preSelectCheckbox } from '@/app/lib/func';
 
 export default function EditForm(
   { questions, categories }: {
@@ -32,14 +33,13 @@ export default function EditForm(
 
   // Effect to pre-select checkboxes based on questions.category
   useEffect(() => {
-    const defaultCategories = questions.categories.split(', ').map(label => categories.find(category => category.label.toLowerCase() === label.toLowerCase()));
-    setSelectedCategories(defaultCategories);
+    preSelectCheckbox(questions, categories, setSelectedCategories);
   }, []);
 
   const getSelectedLabels = () => {
     return selectedCategories.map(category => category.label);
   };
-  
+
 
   function handleFormAction(formData: FormData) {
     const rawFormData = {
