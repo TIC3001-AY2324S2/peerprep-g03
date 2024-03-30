@@ -8,7 +8,7 @@ export default async function Page({params}:{params: {id: string}}) {
   const id = params.id;
   
   const questions = await fetchQuestionById(id);
-  const categories = await fetchCategories();
+  const categories = await fetchCategories();  
 
   if(!questions || !categories){
     notFound();

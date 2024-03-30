@@ -1,6 +1,5 @@
 import Form from '@/app/ui/questions/read-form';
 import Breadcrumbs from '@/app/ui/questions/breadcrumbs';
-import { getDataById } from '@/app/lib/placeholder-data';
 import { notFound } from 'next/navigation';
 // import { categories } from '@/app/lib/placeholder-data';
 import { fetchQuestionById, fetchCategories } from '@/app/lib/data';

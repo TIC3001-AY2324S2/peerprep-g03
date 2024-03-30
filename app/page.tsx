@@ -2,6 +2,7 @@ import PeerprepLogo from '@/app/ui/peerprep-logo';
 import { CreateQuestion, CreateCategory } from '@/app/ui/questions/buttons';
 import Search from '@/app/ui/search';
 import { QuestionsTable, CategoriesTable } from '@/app/ui/questions/table';
+// import { categories } from './lib/placeholder-data';
 import { fetchQuestions, fetchCategories } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
@@ -14,7 +15,6 @@ export default async function Page() {
     notFound();
   }
 
-  console.log(questions);
 
   return (
     <main className="flex min-h-screen flex-col p-6">
