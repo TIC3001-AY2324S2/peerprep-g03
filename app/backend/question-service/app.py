@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from bson.errors import InvalidId
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 import os
@@ -24,7 +25,7 @@ def get_questions():
     if complexity:
         query['complexity'] = complexity
     if category:
-        query['categories'] = {'$in': category.split(',')}
+        query['categories'] = {'$in': [category.strip().title() for category in category.split(',')]}
     
     # Fetch and return filtered questions
     questions = list(questions_collection.find(query, {'_id': 1, 'title': 1, 'complexity': 1, 'categories': 1}))
@@ -38,9 +39,13 @@ def get_questions():
 def get_question(question_id):
     # Fetch a question by its ID
     try:
+        obj_id = ObjectId(question_id)
+    except InvalidId:
+        return jsonify({"error": "Invalid ID format"}), 400
+    try:
         document = questions_collection.find_one({"_id": ObjectId(question_id)})
     except Exception:
-        return jsonify({"error": "Invalid ID format"}), 400
+        return jsonify({"error: An unknown error has occured"}), 400
     if not document:
         return jsonify({"error": "Question not found"}), 404
     else:
@@ -86,7 +91,11 @@ def update_question(question_id):
     if 'categories' in data:
         data['categories'] = [category.strip().title() for category in data['categories'].split(",")]
     try:
-        result = questions_collection.update_one({"_id": ObjectId(question_id)}, {"$set": data})
+        obj_id = ObjectId(question_id)
+    except InvalidId:
+        return jsonify({"error": "Invalid ID format"})
+    try:
+        result = questions_collection.update_one({"_id": obj_id}, {"$set": data})
         if result.matched_count == 0:
             return jsonify({"error": "Question not found"}), 404
         return jsonify({"message": "Question updated successfully"} if result.modified_count else {"message": "No changes detected"}), 200
@@ -122,7 +131,7 @@ def add_category():
     if categories_collection.find_one({'name': data['label']}):
         return jsonify({"error": "Category already exists"}), 409
 
-    result = categories_collection.insert_one({"name": data["label"]})
+    result = categories_collection.insert_one({"name": data["label"].strip().title()})
     data['value'] = str(result.inserted_id)
     return jsonify(data), 201
 
@@ -130,16 +139,24 @@ def add_category():
 def delete_category(category_id):
     # Delete a category by its ID
     try:
-        result = categories_collection.delete_one({"_id": ObjectId(category_id)})
+        obj_id = ObjectId(category_id)
+    except InvalidId:
+        return jsonify({"error": "Invalid ID format"}), 400
+    try:
+        result = categories_collection.delete_one({"_id": obj_id})
         return jsonify({"message": "Category deleted successfully"} if result.deleted_count else {"error": "Category not found"}), 200 if result.deleted_count else 404
     except Exception:
-        return jsonify({"error": "Invalid ID format"}), 400
+        return jsonify({"error": "An unknown error has occured"}), 400
     
 @app.route('/categories/<category_id>', methods=['GET'])
 def get_category(category_id):
     # Fetch a category by its ID
     try:
-        result = categories_collection.find_one({"_id": ObjectId(category_id)})
+        obj_id = ObjectId(category_id)
+    except InvalidId:
+        return jsonify({"error": "Invalid ID format"}), 400
+    try:
+        result = categories_collection.find_one({"_id": obj_id})
     except Exception:
         return jsonify({"error": "Invalid ID format"}), 400
     if not result:
@@ -151,6 +168,24 @@ def get_category(category_id):
         })
         ), 200
     
+@app.route('/categories/<category_id>', methods=['PATCH'])
+def update_category(category_id):
+    #Update a category by its ID
+    data = request.json
+    if "label" not in data:
+        return jsonify({"error": "Missing required field: label"})
+    try:
+        obj_id = ObjectId(category_id)
+    except InvalidId:
+        return jsonify({"error": "Invalid ID format"}), 400
+    update_data = {"name": data["label"].strip().title()}
+    try:
+        result = categories_collection.update_one({"_id": obj_id}, {"$set": update_data})
+        if result.matched_count == 0:
+            return jsonify({"error": "Category not found"}), 404
+        return jsonify({"message": "Category updated successfully"} if result.modified_count else {"message": "No changes detected"}), 200
+    except Exception:
+        return jsonify({"error": "An unknow error has occured"}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
