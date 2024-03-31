@@ -46,7 +46,7 @@ export default function EditForm(
     const rawFormData = {
       title: formData.get('title'),
       description: formData.get('description'),
-      category: getSelectedLabels().join(", "),
+      categories: getSelectedLabels().join(", "),
       complexity: formData.get('complexity'),
     }
     updateQuestion(rawFormData, id);
