@@ -48,10 +48,9 @@ export async function createCategories(formData: FormData) {
 }
 
 
-export async function updateQuestion(rawFormData, id: { rawFormData: FormData[], id: string}) {
+export async function updateQuestion(rawFormData, id) {
     try {
-        const json = JSON.stringify(rawFormData);
-        const id = id;
+        const json = JSON.stringify(rawFormData);        
         const url = `http://127.0.0.1:5000/questions/${id}`;
         const response = await axios.patch(url, json, {
             headers: {
