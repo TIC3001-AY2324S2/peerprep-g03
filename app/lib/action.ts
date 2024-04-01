@@ -60,7 +60,7 @@ export async function updateQuestion(rawFormData, id: { rawFormData: FormData[],
         });
         console.log('Response data:', response.data);
     } catch (error) {
-        console.error('Failed to Create the category:', error.message);
+        console.error('Failed to Update the questions:', error.message);
     }
     revalidatePath('/');
     redirect('/');
