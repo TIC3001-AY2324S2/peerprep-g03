@@ -7,6 +7,12 @@
 
   <h1>Question Collaboration Finder</h1>
   <form id="quizForm">
+    <label for="studentName">Student Name:</label>
+    <input type="text" id="studentName" name="studentName" placeholder="Enter your name">
+    <br><br>
+    <label for="studentId">Student ID:</label>
+    <input type="text" id="studentId" name="studentId" placeholder="Enter your ID">
+    <br><br>
     <label for="topic">Select a topic:</label>
     <select name="topic" id="topic">
         <option value="math">Math</option>
@@ -24,8 +30,6 @@
     </select>
     <br><br>
   </form>
-
-  <input id="messageInput" type="text" placeholder="Enter your message" />
   <button onclick="sendMessage()">Find Match</button>
 
   <div id="matchResult" style="margin-top: 20px;">
@@ -52,10 +56,11 @@
             document.getElementById('matchResult').innerHTML = '<p>Match found: [Student Name]</p>';
         }, 3000); // Simulated delay
       };
+      var studentName = document.getElementById('studentName').value;
+      var studentId = document.getElementById('studentId').value;
       var topic = document.getElementById('topic').value;
       var difficulty = document.getElementById('difficulty').value;
-      var inputMsg = document.getElementById('messageInput').value;
-      const message = inputMsg + " : "  + topic + " : " + difficulty;
+      const message = `${studentName} : ${studentId} : ${topic} : ${difficulty}`;
       startCountdown(30); // Start the countdown with 30 seconds
 
       fetch(`http://localhost:3000/send/${encodeURIComponent(message)}`)
