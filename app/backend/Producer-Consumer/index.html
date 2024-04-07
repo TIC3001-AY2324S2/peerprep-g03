@@ -1,22 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RabbitMQ Example</title>
+  <title>Question Collaboration Finder</title>
   <link rel="stylesheet" href="style.css">
-</head>
 <body>
-  <h1>RabbitMQ Message Queue</h1>
+
+  <h1>Question Collaboration Finder</h1>
+  <form id="quizForm">
+    <label for="topic">Select a topic:</label>
+    <select name="topic" id="topic">
+        <option value="math">Math</option>
+        <option value="science">Science</option>
+        <option value="english">English</option>
+        <!-- Add more topics as needed -->
+    </select>
+    <br><br>
+    <label for="difficulty">Select difficulty:</label>
+    <select name="difficulty" id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+        <!-- Add more difficulty levels as needed -->
+    </select>
+    <br><br>
+  </form>
+
   <input id="messageInput" type="text" placeholder="Enter your message" />
-  <button onclick="sendMessage()">Send Message</button>
+  <button onclick="sendMessage()">Find Match</button>
+
+  <div id="matchResult" style="margin-top: 20px;">
+    <!-- This element will be updated with the match result -->
+    <p>Waiting for a match...</p>
+  </div>
+
+  <div id="countdown" style="margin-top: 20px;">
+  </div>
+
 
   <script>
     function sendMessage() {
-      const message = document.getElementById('messageInput').value;
+      document.getElementById('quizForm').onsubmit = function(event) {
+        event.preventDefault();
+        // Placeholder: Implement AJAX call to backend to submit the topic and difficulty
+        // and listen for the result. On result, update the #matchResult element.
+
+        document.getElementById('matchResult').innerHTML = '<p>Searching for a match...</p>';
+        
+        // This part should be replaced with real AJAX handling logic
+        setTimeout(function() {
+            // Simulating match finding result
+            document.getElementById('matchResult').innerHTML = '<p>Match found: [Student Name]</p>';
+        }, 3000); // Simulated delay
+      };
+      var topic = document.getElementById('topic').value;
+      var difficulty = document.getElementById('difficulty').value;
+      var inputMsg = document.getElementById('messageInput').value;
+      const message = inputMsg + " : "  + topic + " : " + difficulty;
+      startCountdown(30); // Start the countdown with 30 seconds
 
       fetch(`http://localhost:3000/send/${encodeURIComponent(message)}`)
         .then(response => response.text())
         .then(data => alert(data));
     }
+
+    let countdownInterval;
+
+    function startCountdown(duration) {
+      var timer = duration, minutes, seconds;
+      countdownInterval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        document.getElementById('countdown').innerHTML = '<p>Time remaining: ' + minutes + ":" + seconds + '</p>';
+
+        if (--timer < 0) {
+          document.getElementById('countdown').innerHTML = '<p>Timeout! No match found.</p>';
+          document.getElementById('matchResult').innerHTML = '';
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+    }
+
+    function stopCountdown() {
+      clearInterval(countdownInterval);
+      document.getElementById('countdown').innerHTML = ''; // Clear the countdown
+    }
   </script>
+
 </body>
 </html>
