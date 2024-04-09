@@ -1,4 +1,4 @@
-import { PencilIcon, PlusIcon, TrashIcon, BookOpenIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PlusIcon, TrashIcon, BookOpenIcon, ArrowRightEndOnRectangleIcon, ArrowUpOnSquareIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteQuestion, deleteCategory } from '@/app/lib/action';
 
@@ -10,6 +10,30 @@ export function CreateQuestion() {
     >
       <span className="hidden md:block">Create Question</span>{' '}
       <PlusIcon className="h-5 md:ml-4" />
+    </Link>
+  );
+}
+
+export function SignUpButton() {
+  return (
+    <Link
+      href="/questions/create"
+      className="flex h-10 items-center rounded-lg bg-blue-400 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"      
+    >
+      <span className="hidden md:block">Sign Up</span>{' '}
+      <ArrowUpOnSquareIcon className="h-5 md:ml-4" />
+    </Link>
+  );
+}
+
+export function LogInButton() {
+  return (
+    <Link
+      href="/questions/create"
+      className="flex h-10 items-center rounded-lg bg-blue-400 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"      
+    >
+      <span className="hidden md:block">Log In</span>{' '}
+      <ArrowRightEndOnRectangleIcon className="h-5 md:ml-4" />
     </Link>
   );
 }

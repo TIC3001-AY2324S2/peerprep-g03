@@ -6,7 +6,7 @@ export async function fetchQuestions() {
         return response.data; 
     } catch (err) {
         console.error('Database Error:', err);
-        throw new Error('Failed to fetch all questions.');
+        // throw new Error('Failed to fetch all questions.');
     }
 }
 
@@ -16,7 +16,7 @@ export async function fetchCategories() {
         return response.data; 
     } catch (err) {
         console.error('Database Error:', err);
-        throw new Error('Failed to fetch all categories.');
+        // throw new Error('Failed to fetch all categories.');
     }
 }
 
@@ -28,7 +28,7 @@ export async function fetchQuestionById(id: string) {
         return resultById; // This will be your JSON response
     } catch (err) {
         console.error('Database Error:', err);
-        throw new Error('Failed to fetch the question by Id.');
+        // throw new Error('Failed to fetch the question by Id.');
     }
 }
 
@@ -39,6 +39,6 @@ export async function fetchCategoryById(id: string) {
         return resultById; // This will be your JSON response
     } catch (err) {
         console.error('Database Error:', err);
-        throw new Error('Failed to fetch the category by Id.');
+        // throw new Error('Failed to fetch the category by Id.');
     }
 }
