@@ -17,7 +17,7 @@ export default async function Page() {
 
       </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-        <h1 className="text-[30px]">Sign In</h1>
+        <h1 className="text-[30px]">Log In</h1>
         <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-3/6 md:px-20">
           {/* Add Hero Images Here */}
           <div className="relative ml-auto">

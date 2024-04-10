@@ -39,7 +39,7 @@ export function LogInButton({ children, className, ...rest }: ButtonProps) {
       className="flex w-full h-10 items-center rounded-lg bg-blue-400 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
       <span className="hidden md:block">Log In</span>{' '}
-      <ArrowRightEndOnRectangleIcon className="h-5 md:ml-4" />
+      <ArrowRightEndOnRectangleIcon className="ml-auto h-5 w-5 text-gray-50" />
       {children}
     </button>
   );
