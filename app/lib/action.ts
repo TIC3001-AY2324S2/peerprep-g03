@@ -144,23 +144,16 @@ export async function loginUser(formData: FormData) {
             },
         });
 
-        console.log('Login response:', response.data);
-
         const accessToken = response.data.accessToken;
 
-        if (response.data.accessToken) {
-            const accessToken = response.data.accessToken;
-            console.log('accessToken:', accessToken);
-            // Use the accessToken for the user data request
-        } else {
-            console.error('Login failed: Access token missing');
-        }
-        
         const url2 = 'http://localhost:3001/users/';
         const response2 = await axios.get(url2, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,                
             },
+            data: {
+                email: formData.email,
+            },            
         });
 
         if (response2.data) {
@@ -168,7 +161,12 @@ export async function loginUser(formData: FormData) {
         } else {
             console.warn('No user data found in response');
         }
+
+        const userData = response2.data;
+
+        return userData;
+        
     } catch (error) {
         console.error('Error:', error.message);
-    }  
+    }
 }
