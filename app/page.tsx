@@ -4,7 +4,8 @@ import { QuestionsTable, CategoriesTable } from '@/app/ui/questions/table';
 // import { categories } from './lib/placeholder-data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import Form from '@/app/ui/user-account/create-form';
+import CreateAccountForm from '@/app/ui/user-account/create-form';
+import LogInForm from '@/app/ui/user-account/login-form';
 
 
 export default async function Page() {
@@ -30,14 +31,15 @@ export default async function Page() {
           </div>
         </div>
         <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/6 md:px-20">
+        <h1 className="text-[20px]">Log in here</h1>
           <div className="ml-auto flex gap-4">
-            <LogInButton />
+            <LogInForm />
           </div>
         </div>
         <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/6 md:px-20">
           <h1 className="text-[20px]">Create an account here</h1>
           <div className="ml-auto flex gap-4">
-            <Form />
+            <CreateAccountForm />
           </div>
         </div>
       </div>
