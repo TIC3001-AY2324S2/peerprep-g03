@@ -6,33 +6,46 @@ import {
   EnvelopeIcon,
   KeyIcon,
 } from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
 import React, { useState } from "react";
-import Select from "react-select";
-import { CreateAccountButton, LogInButton } from '@/app/ui/questions/buttons';
+import { AlreadyHaveAccount } from '@/app/ui/user-service/buttons';
+import { CreateAccountButton } from '@/app/ui/button';
+import { createUser } from '@/app/lib/action';
 
 export default function Form() {
 
-  // const [selectedOptions, setSelectedOptions] = useState([]);
-
-  // const setHandle = (e) => {
-  //   setSelectedOptions(Array.isArray(e) ? e.map((cat) => cat.label) : []);
-  // };
-
-  // function handleFormAction(formData: FormData) {
-  //   const rawFormData = {
-  //     title: formData.get('title'),
-  //     description: formData.get('description'),
-  //     categories: selectedOptions.join(", "),
-  //     complexity: formData.get('complexity'),
-  //   }
-  //   createQuestion(rawFormData);
-  // }
+  function handleFormAction(formData: FormData) {
+    const rawFormData = {
+      username: formData.get('username'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+    }
+    createUser(rawFormData);
+  }
 
   return (
-    <form> {/* todo: action={handleFormAction} */}
+    <form action={handleFormAction}> {/* todo: action={handleFormAction} */}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        
+        {/* Username Input */}
+        <div className="mb-4">
+          <label htmlFor="amount" className="mb-2 block text-sm font-medium">
+            Input username here.
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id='username'
+                name='username'
+                type="string"
+                placeholder="Username"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                defaultValue=""
+                required
+              />
+              <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+            </div>
+          </div>
+        </div>
+
         {/* Email Input */}
         <div className="mb-4">
           <label htmlFor="amount" className="mb-2 block text-sm font-medium">
@@ -46,6 +59,7 @@ export default function Form() {
                 type="email"
                 placeholder="Email"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                defaultValue=""
                 required
               />
               <EnvelopeIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -66,6 +80,7 @@ export default function Form() {
                 type="password"
                 placeholder="Password"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                defaultValue=""
                 required
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -74,8 +89,14 @@ export default function Form() {
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
-        <LogInButton />
+        {/*<CreateAccountButton />*/}
+        <CreateAccountButton type="submit"></CreateAccountButton>
       </div>
+      <div>
+        <AlreadyHaveAccount />
+      </div>
+
+
     </form >
   );
 }

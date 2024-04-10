@@ -14,21 +14,22 @@ export function CreateQuestion() {
   );
 }
 
-export function CreateAccountButton() {
+export function LogInButton() {
   return (
     <Link
-      href="/questions/create"
-      className="flex w-full h-10 items-center rounded-lg bg-green-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"      
+      href="/user-service/signin"
+      className="flex w-full h-10 items-center rounded-lg bg-blue-400 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"      
     >
-      <span className="hidden md:block">Create new account</span>{' '}      
+      <span className="hidden md:block">Log In</span>{' '}
+      <ArrowRightEndOnRectangleIcon className="h-5 md:ml-4" />
     </Link>
   );
 }
 
-export function LogInButton() {
+export function CreateAccountButton() {
   return (
     <Link
-      href="/questions/create"
+      href="/user-service/signin"
       className="flex w-full h-10 items-center rounded-lg bg-blue-400 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"      
     >
       <span className="hidden md:block">Log In</span>{' '}

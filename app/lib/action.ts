@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 import axios from 'axios';
+import { CreateUserSuccess } from '@/app/ui/CreateUserSuccess';
 
 export async function createQuestion(rawFormData: {
     rawFormData: {
@@ -50,7 +51,7 @@ export async function createCategories(formData: FormData) {
 
 export async function updateQuestion(rawFormData, id) {
     try {
-        const json = JSON.stringify(rawFormData);        
+        const json = JSON.stringify(rawFormData);
         const url = `http://127.0.0.1:5000/questions/${id}`;
         const response = await axios.patch(url, json, {
             headers: {
@@ -98,7 +99,7 @@ export async function deleteQuestion(id: string) {
         revalidatePath('/');
     } catch (err) {
         console.error('Database Error:', err);
-        throw new Error('Failed to delete the question.');
+        // throw new Error('Failed to delete the question.');
     }
 }
 
@@ -109,6 +110,65 @@ export async function deleteCategory(id: string) {
         revalidatePath('/');
     } catch (err) {
         console.error('Database Error:', err);
-        throw new Error('Failed to delete the category.');
+        // throw new Error('Failed to delete the category.');
     }
+}
+
+export async function createUser(formData: FormData) {
+    try {
+        const json = JSON.stringify(formData);
+        const url = 'http://localhost:3001/users/';
+        const response = await axios.post(url, json, {
+            headers: {
+                'Content-Type': 'application/json', // Set the Content-Type header
+            },
+        });
+        console.log('Response data:', response.data);
+    } catch (error) {
+        console.error('Failed to Create the user:', error.message);
+        revalidatePath('/app/not-found.tsx');
+        redirect('/app/not-found.tsx');
+    }
+
+    revalidatePath('/user-service/login');
+    redirect('/user-service/login');
+}
+
+export async function loginUser(formData: FormData) {
+    try {
+        const json = JSON.stringify(formData);
+        const url = 'http://localhost:3001/auth/login';
+        const response = await axios.post(url, json, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        console.log('Login response:', response.data);
+
+        const accessToken = response.data.accessToken;
+
+        if (response.data.accessToken) {
+            const accessToken = response.data.accessToken;
+            console.log('accessToken:', accessToken);
+            // Use the accessToken for the user data request
+        } else {
+            console.error('Login failed: Access token missing');
+        }
+        
+        const url2 = 'http://localhost:3001/users/';
+        const response2 = await axios.get(url2, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,                
+            },
+        });
+
+        if (response2.data) {
+            console.log('User data:', response2.data);
+        } else {
+            console.warn('No user data found in response');
+        }
+    } catch (error) {
+        console.error('Error:', error.message);
+    }  
 }
