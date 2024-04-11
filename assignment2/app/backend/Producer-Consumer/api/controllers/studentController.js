@@ -31,7 +31,6 @@ const getStudentByID = async (req, res) => {
 };
 
 
-
 // @desc    Add a student
 // @route   POST /api/students
 // @access  Public
@@ -75,10 +74,11 @@ const addStudent = async (req, res) => {
 // @access  Public
 const updateStudent = async (req, res) => {
     const { studentID, studentName, topic, difficulty, matchStatus} = req.body;
+    console.log(req.body);
 
   // validate request body
   if (!studentID || !studentName || !topic || !difficulty || !matchStatus) {
-    return res.status(400).json({ message: "Please enter all fields." });
+    return res.status(400).json({ message: "Please enter all fields." + req.body });
   }
 
   try {
@@ -129,6 +129,17 @@ const deleteStudent = async (req, res) => {
   }
 };
 
+const fetchStudentsByTopic = async (req, res) => {
+  try {
+    // Find students whose topic field matches any value in the topics array
+    const students = await Student.find(req.params.topic);
+
+    res.status(200).json(students);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // export controller functions to be used in corresponding route
 module.exports = {
   fetchAllStudents,
@@ -136,4 +147,5 @@ module.exports = {
   addStudent,
   updateStudent,
   deleteStudent,
+  fetchStudentsByTopic,
 };

@@ -20,9 +20,25 @@ app.options(
 );
 app.use(cors());
 
+function parseMessage(messageContent) {
+  const [studentName, studentId, topic, difficulty] = messageContent.split(" : ").map(part => part.trim());
+
+  const messageObj = {
+    studentName: studentName,
+    studentId: studentId,
+    topic: topic,
+    difficulty: difficulty
+  };
+
+  message = JSON.stringify(messageObj);
+
+  return message;
+}
+
+
 // Define a GET route "/send" that will be used to send messages to RabbitMQ
 app.get("/send/:message", async (req, res) => {
-  const message = req.params.message; // Get the message from the route parameter
+  const message = parseMessage(req.params.message); // Get the message from the route parameter
 
   const connection = await amqp.connect("amqp://localhost"); // Create a connection to the local RabbitMQ server
   const channel = await connection.createChannel();

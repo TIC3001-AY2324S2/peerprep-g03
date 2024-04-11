@@ -7,6 +7,7 @@ const {
   addStudent,
   updateStudent,
   deleteStudent,
+  fetchStudentsByTopic,
 } = require("../controllers/studentController");
 
 // call the fetchAllStudents function
@@ -28,5 +29,8 @@ router.route("/:id").put(updateStudent);
 // call the deleteStudent function
 // when a DELETE request is made to http://localhost:8080/api/students/:id
 router.route("/:id").delete(deleteStudent);
+
+// Route to fetch students by topic
+router.get("/byTopic", fetchStudentsByTopic);
 
 module.exports = router;

@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const express = require ('express');
 const cors = require("cors");
 
+const { addStudent } = require("./api/controllers/studentController");
+
 // initialize the Express.js application
 // store it in the app variable
 const app = express();
@@ -85,13 +87,6 @@ const difficultyLevels = {
 };
 
 
-// Immediately-invoked Function Expression (IIFE) to use async-await at the top level
-
-function parseMessage(messageContent) {
-  const [studentName, studentId, topic, difficulty] = messageContent.split(" : ").map(part => part.trim());
-  return { studentName, studentId, topic, difficulty };
-}
-
 function findBestMatch(newMessage, pendingMatches) {
   let bestMatchIndex = -1;
   let smallestDifficultyGap = Infinity;
@@ -119,10 +114,21 @@ function findBestMatch(newMessage, pendingMatches) {
   // Start consuming messages from the queue "message_queue"
   channel.consume("message_queue", (message) => {
     console.log("Received message:", message.content.toString());
-    const newMessage = parseMessage(message.content.toString());
-    console.log("Parsed message:", newMessage);
+    const messageContent = JSON.parse(message.content.toString());
 
-    //Send data to DB
+    // Extract student data from the parsed message
+    const { studentName, studentID, topic, difficulty } = messageContent;
+
+    /*try {
+      // Call the addStudent function to save the student data to MongoDB
+      addStudent({ body: { studentID, studentName, topic, difficulty, matchStatus: "Pending" } });
+  
+      console.log("Student data added to MongoDB successfully!");
+    } catch (error) {
+      console.error("Error processing message:", error);
+    }*/
+
+
 
     //Listen to DB for status change
 
@@ -130,7 +136,7 @@ function findBestMatch(newMessage, pendingMatches) {
 
     //Timeout for unmatched message
     setTimeout(() => {
-      console.log(`Timeout! No match found for ${newMessage.studentName}`);
+      console.log(`Timeout! No match found for ${studentName}`);
       const timeoutMessage = 'Timeout! No match found.';
 
       // Broadcast timeout message to all connected clients

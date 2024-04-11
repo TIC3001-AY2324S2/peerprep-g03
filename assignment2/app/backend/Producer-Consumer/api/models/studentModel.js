@@ -25,5 +25,3 @@ const studentSchema = mongoose.Schema({
 
 // export Student model to be used in controller
 module.exports = mongoose.model('Student', studentSchema)
-
-

@@ -91,6 +91,13 @@
         resetStopwatch();
         startStopwatch();
   
+        const messageObj = {
+          studentName: studentName,
+          studentId: studentId,
+          topic: topic,
+          difficulty: difficulty
+        };
+
         const message = `${studentName} : ${studentId} : ${topic} : ${difficulty}`;
   
         fetch(`http://localhost:3000/send/${encodeURIComponent(message)}`)
