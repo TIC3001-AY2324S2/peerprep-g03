@@ -2,15 +2,35 @@
 
 import Link from 'next/link';
 import {
-  DocumentTextIcon,  
+  DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation'
 
 export default function Form() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isMatchFound, setIsMatchFound] = useState(false);
+  const router = useRouter();
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    // Simulate some processing time (replace with your actual logic)
+    setTimeout(() => {
+      const isMatched = true;/* Your logic to check for a match */ // Replace with actual logic
+      setIsLoading(false);
+      setIsMatchFound(isMatched);
+
+      if (isMatched) {
+        router.push('/matching/found'); // Redirect on match found
+      }
+    }, 30000);
+  };
 
   return (
-    <form> {/* todo: action={handleFormAction} */}
+    <form onSubmit={handleFormSubmit}> {/* todo: action={handleFormAction} */}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Title */}
         <div className="mb-4">
@@ -28,7 +48,7 @@ export default function Form() {
             />
             <DocumentTextIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
           </div>
-        </div>  
+        </div>
 
         {/* Complexity */}
         <fieldset>
@@ -87,9 +107,22 @@ export default function Form() {
           </div>
         </fieldset>
       </div>
-      <div className="mt-6 flex justify-end gap-4">        
-        <Button type="submit">Find Mathcing</Button>
+
+      <div className="flex justify-center">
+        <Button type="submit" disabled={isLoading}>{isLoading ? 'Matching...' : 'Find Matching'}</Button>
       </div>
+
+      {isLoading && (
+        <div className="flex justify-center mt-4">
+          <div className="loader"></div>
+        </div>
+      )}
+
+      {!isLoading && !isMatchFound && (
+        <div className="text-center text-red-500 text-[20px]">
+          No match found! Retry Matching!
+        </div>
+      )}
     </form>
   );
 }
