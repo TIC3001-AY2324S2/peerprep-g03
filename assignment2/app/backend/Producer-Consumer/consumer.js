@@ -1,6 +1,7 @@
 // Require the amqplib package to interact with RabbitMQ
 const amqp = require("amqplib");
 const WebSocket = require('ws');
+use('mongodbVSCodePlaygroundDB');
 
 
 // Setting up a WebSocket server
@@ -22,10 +23,15 @@ wss.on('connection', function connection(ws) {
   ws.send('Connection established');
 });
 
+// import the dependencies required for dotenv
+// the config() function allows for reading of the .env file
+const dotenv = require('dotenv').config()
+// import the connectDB function created earlier
+const connectDB = require('./config/db')
 
+// initialize connection to MongoDB database
+connectDB()
 
-
-let pendingMatches = [];
 
 const difficultyLevels = {
   easy: 1,
@@ -70,9 +76,16 @@ function findBestMatch(newMessage, pendingMatches) {
     console.log("Received message:", message.content.toString());
     const newMessage = parseMessage(message.content.toString());
     console.log("Parsed message:", newMessage);
-    
 
-    // Timeout for unmatched message
+
+    //e0493677:P@ssw0rd
+    //Send data to DB
+
+    //Listen to DB for status change
+
+    //safeguard from race condition : ((current time) - (time at which record was pushed)) < (your interval of timeout)
+
+    //Timeout for unmatched message
     setTimeout(() => {
       console.log(`Timeout! No match found for ${newMessage.studentName}`);
       const timeoutMessage = 'Timeout! No match found.';
