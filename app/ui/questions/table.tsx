@@ -18,7 +18,7 @@ export async function QuestionsTable({ questions }: { questions: QuestionsField[
                   <div>
                     <div className="mb-2 flex items-center">
                       <p>{question.title}</p>
-                    </div>                    
+                    </div>
                     <QuestionComplexity complexity={question.complexity} />
                   </div>
                 </div>

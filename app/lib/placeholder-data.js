@@ -9,7 +9,7 @@ const categories = [
   {value: '7', label: "Arrays"},
 ];
 
-const question = [
+const questions = [
   {
     id: '1',
     title: 'Reverse a String',
@@ -167,7 +167,7 @@ const question = [
 
 ];
 
-const questionShowTitleComplexity = question.map(item => {
+const questionShowTitleComplexity = questions.map(item => {
   return {
     id: item.id,
     title: item.title,
@@ -194,7 +194,7 @@ function askCategoryById(id){
 }
 
 module.exports = {
-  question,
+  questions,
   questionShowTitleComplexity,
   categories,
   askQuestionById,

@@ -4,7 +4,7 @@ import { QuestionsTable, CategoriesTable } from '@/app/ui/questions/table';
 // import { categories } from './lib/placeholder-data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import CreateAccountForm from '@/app/ui/user-service/create-form';
+import CreateAccountForm from '@/app/ui/user-service/create-acc-form';
 import LogInForm from '@/app/ui/user-service/login-form';
 
 
