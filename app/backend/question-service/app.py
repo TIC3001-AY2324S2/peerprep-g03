@@ -45,7 +45,7 @@ def get_question(question_id):
     try:
         document = questions_collection.find_one({"_id": ObjectId(question_id)})
     except Exception:
-        return jsonify({"error: An unknown error has occured"}), 400
+        return jsonify({"error: An unknown error has occurred"}), 400
     if not document:
         return jsonify({"error": "Question not found"}), 404
     else:
@@ -154,7 +154,7 @@ def delete_category(category_id):
         result = categories_collection.delete_one({"_id": obj_id})
         return jsonify({"message": "Category deleted successfully"} if result.deleted_count else {"error": "Category not found"}), 200 if result.deleted_count else 404
     except Exception:
-        return jsonify({"error": "An unknown error has occured"}), 400
+        return jsonify({"error": "An unknown error has occurred"}), 400
     
 @app.route('/categories/<category_id>', methods=['GET'])
 def get_category(category_id):
@@ -193,8 +193,8 @@ def update_category(category_id):
             return jsonify({"error": "Category not found"}), 404
         return jsonify({"message": "Category updated successfully"} if result.modified_count else {"message": "No changes detected"}), 200
     except Exception:
-        return jsonify({"error": "An unknow error has occured"}), 400
+        return jsonify({"error": "An unknown error has occurred"}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=8000)
     
