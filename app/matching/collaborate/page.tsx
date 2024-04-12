@@ -1,10 +1,8 @@
 import PeerprepLogo from '@/app/ui/peerprep-logo';
-import { CreateQuestion, CreateCategory, CreateAccountButton, LogInButton } from '@/app/ui/questions/buttons';
 
 import { notFound } from 'next/navigation';
 import { PowerIcon } from '@heroicons/react/24/outline';
-import MathchingForm from '@/app/ui/matching/find-match-form';
-import {MatchingTable} from '@/app/ui/matching/table';
+import CollaborateForm from '@/app/ui/matching/collaborate-form';
 
 
 export default async function Page() {
@@ -16,17 +14,17 @@ export default async function Page() {
       </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div>
-        <h1 className="text-[30px]">Match Found</h1>
+        <h1 className="text-[30px]">Collaboration</h1>
           <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
               <PowerIcon className="w-6" />
               <div className="hidden md:block">Sign Out</div>
             </button>          
         </div>
-        <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-3/5 md:px-20">
+        <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-5/6 md:px-20">
           {/* Find your match form here */}
-          <h1 className="text-[20px]">Find Matching here</h1>
+          <h1 className="text-[20px]">Collaborated with your match</h1>
           <div className="relative ml-auto">
-            <MathchingForm />
+            <CollaborateForm />
           </div>
         </div>        
       </div>
