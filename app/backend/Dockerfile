@@ -16,4 +16,7 @@ RUN pip install --no-cache-dir -r /app/question-service/requirements.txt
 EXPOSE 8000
 
 # Activate the virtual environment
+# For Windows
+CMD [".\.venv\Scripts\activate && python3 .\question-service\app.py"]
+# For Mac
 CMD ["/bin/bash", "-c", "source .venv/bin/activate && python3 ./question-service/app.py"]
