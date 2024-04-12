@@ -35,50 +35,51 @@ const getStudentByID = async (req, res) => {
 // @route   POST /api/students
 // @access  Public
 const addStudent = async (req, res) => {
-  const { studentID, studentName, topic, difficulty, matchStatus} = req.body;
+    const { studentId, studentName, topic, difficulty, matchStatus = "Finding Match"} = req.body;
 
-  // validate request body
-  if (!studentID || !studentName || !topic || !difficulty || !matchStatus) {
-    return res.status(400).json({ message: "Please enter all fields." });
-  }
+    // validate request body
+    if (!studentId || !studentName || !topic || !difficulty || !matchStatus) {
+        return res.status(400).json({ message: "Please enter all fields." });
+    }
 
-  try {
-    // function provided by Mongoose to create a new Student document
-    const student = await Student.create({
-      studentID,
-      studentName,
-      topic,
-      difficulty,
-      matchStatus,
-    });
+    try {
+        // function provided by Mongoose to create a new Student document
+        const student = await Student.create({
+        studentId,
+        studentName,
+        topic,
+        difficulty,
+        matchStatus,
+        });
 
-    // return the newly created Student in JSON format
-    // with created success status 201
-    res.status(201).json({
-      _id: student._id,
-      studentID: student.studentID,
-      studentName: student.studentName,
-      topic: student.topic,
-      difficulty: student.difficulty,
-      matchStatus: student.matchStatus,
-    });
-  } catch (error) {
-    // catch exception when fields are missing
-    res.status(400).json({ message: "Invalid student data. : " +error });
-  }
+        // return the newly created Student in JSON format
+        // with created success status 201
+        res.status(201).json({
+        _id: student._id,
+        studentId: student.studentId,
+        studentName: student.studentName,
+        topic: student.topic,
+        difficulty: student.difficulty,
+        matchStatus: student.matchStatus,
+        });
+    } catch (error) {
+        // catch exception when fields are missing
+        res.status(400).json({ message: "Invalid student data. : " +error });
+    }
 };
 
 
 // @desc    Update an student
 // @route   PUT /api/students
 // @access  Public
-const updateStudent = async (req, res) => {
-    const { studentID, studentName, topic, difficulty, matchStatus} = req.body;
+const updateStudent = async (req) => {
+    const { studentId, studentName, topic, difficulty, matchStatus} = req.body;
     console.log(req.body);
 
   // validate request body
-  if (!studentID || !studentName || !topic || !difficulty || !matchStatus) {
-    return res.status(400).json({ message: "Please enter all fields." + req.body });
+  if (!studentId || !studentName || !topic || !difficulty || !matchStatus) {
+    return false;
+    //return res.status(400).json({ message: "Please enter all fields." + req.body });
   }
 
   try {
@@ -88,7 +89,7 @@ const updateStudent = async (req, res) => {
     const student = await Student.findById(req.params.id);
 
     // update the document
-    student.studentID = studentID;
+    student.studentId = studentId;
     student.studentName = studentName;
     student.topic = topic;
     student.difficulty = difficulty;
@@ -100,13 +101,16 @@ const updateStudent = async (req, res) => {
 
     // return the updated student in JSON format
     // with success status 200
-    res.status(200).json({
+    return true;
+    
+    /*res.status(200).json({
       _id: student._id,
       title: student.title,
       description: student.description,
-    });
+    });*/
   } catch (error) {
-    res.status(400).json({ message: "Invalid student data." });
+    return false;
+    //res.status(400).json({ message: "Invalid student data." });
   }
 };
 

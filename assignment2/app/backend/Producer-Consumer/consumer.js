@@ -6,6 +6,7 @@ const express = require ('express');
 const cors = require("cors");
 
 const { addStudent } = require("./api/controllers/studentController");
+const Student = require("./api/models/studentModel");
 
 // initialize the Express.js application
 // store it in the app variable
@@ -51,13 +52,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Hello World" });
 });
 
-app.use("/api/addresses", require("./api/routes/addressRoutes"));
-app.use("/api/students", require("./api/routes/studentRoutes"));
-
-
 // export Express.js application to be used elsewhere
 module.exports = app;
-
 
 // Setting up a WebSocket server
 const wss = new WebSocket.Server({ port: 3080 });
@@ -78,29 +74,35 @@ wss.on('connection', function connection(ws) {
   ws.send('Connection established');
 });
 
+// Function to watch matchStatus changes for a student
+function watchStudentMatchStatus(studentObjId) {
+  // Create a change stream for the student
+  const changeStream = Student.watch([{ $match: { _id: studentObjId } }]);
 
+  // Listen for changes in the 'change' event
+  changeStream.on('change', change => {
+    console.log('Match status changed:', change.updateDescription.updatedFields.matchStatus);
+  });
 
-const difficultyLevels = {
-  easy: 1,
-  medium: 2,
-  hard: 3
-};
+  // Set up a timer to check for changes every 5 seconds
+  const interval = setInterval(() => {
+    console.log('Checking for matchStatus changes...');
+    // Perform check for matchStatus changes here
+  }, 1000);
 
+  const timeout = setTimeout(() => {
+    clearInterval(interval); // Stop the interval timer
+    console.log('Timeout! No match status change detected within 30 seconds.');
 
-function findBestMatch(newMessage, pendingMatches) {
-  let bestMatchIndex = -1;
-  let smallestDifficultyGap = Infinity;
-
-  for (let i = 0; i < pendingMatches.length; i++) {
-    if (newMessage.topic === pendingMatches[i].topic) {
-      const difficultyGap = Math.abs(difficultyLevels[newMessage.difficulty] - difficultyLevels[pendingMatches[i].difficulty]);
-      if (difficultyGap < smallestDifficultyGap) {
-        smallestDifficultyGap = difficultyGap;
-        bestMatchIndex = i;
-      }
-    }
-  }
-  return bestMatchIndex;
+    // Update the student's matchStatus to "Timeout"
+    Student.findByIdAndUpdate(studentObjId, { matchStatus: "Timeout" }, { new: true })
+      .then(updatedStudent => {
+        console.log('Student matchStatus updated to "Timeout":', updatedStudent);
+      })
+      .catch(err => {
+        console.error('Error updating student matchStatus:', err);
+      });
+  }, 20000);
 }
 
 (async () => {
@@ -115,28 +117,31 @@ function findBestMatch(newMessage, pendingMatches) {
   channel.consume("message_queue", (message) => {
     console.log("Received message:", message.content.toString());
     const messageContent = JSON.parse(message.content.toString());
-
-    // Extract student data from the parsed message
-    const { studentName, studentID, topic, difficulty } = messageContent;
-
-    /*try {
-      // Call the addStudent function to save the student data to MongoDB
-      addStudent({ body: { studentID, studentName, topic, difficulty, matchStatus: "Pending" } });
-  
-      console.log("Student data added to MongoDB successfully!");
-    } catch (error) {
-      console.error("Error processing message:", error);
-    }*/
+    console.log("Parsed message:", messageContent);
+    messageContent.matchStatus = "Finding match";
 
 
+    const newStudent = new Student(messageContent);
+    
+    newStudent.save()
+    .then(savedStudent => {
+      console.log("New student saved successfully:", savedStudent._id);
 
-    //Listen to DB for status change
+      // Call the watchStudentMatchStatus function for the newly saved student
+      watchStudentMatchStatus(savedStudent._id, () => {
+        // Acknowledge the RabbitMQ message after the timeout logic completes
+        channel.ack(message);
+      });
+    })
+    .catch(err => {
+      console.error("Error saving student:", err);
+    });
 
     //safeguard from race condition : ((current time) - (time at which record was pushed)) < (your interval of timeout)
 
     //Timeout for unmatched message
-    setTimeout(() => {
-      console.log(`Timeout! No match found for ${studentName}`);
+    /*setTimeout(() => {
+      console.log(`Timeout! No match found for ${messageContent.studentName}`);
       const timeoutMessage = 'Timeout! No match found.';
 
       // Broadcast timeout message to all connected clients
@@ -145,9 +150,10 @@ function findBestMatch(newMessage, pendingMatches) {
           client.send(JSON.stringify({ type: 'timeout', message: timeoutMessage }));
         }
       });
-    }, 3000); // 3-second timeout
-
-    channel.ack(message); // Acknowledge the message so RabbitMQ knows it has been processed
+    }, 30000); // 30-second timeout*/
+    
+    //channel.ack(message); // Acknowledge the message so RabbitMQ knows it has been processed
+    //console.log("Ack Message 2");
   });
 
   console.log("Consumer waiting for messages...");

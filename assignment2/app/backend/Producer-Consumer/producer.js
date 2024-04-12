@@ -24,8 +24,8 @@ function parseMessage(messageContent) {
   const [studentName, studentId, topic, difficulty] = messageContent.split(" : ").map(part => part.trim());
 
   const messageObj = {
-    studentName: studentName,
     studentId: studentId,
+    studentName: studentName,
     topic: topic,
     difficulty: difficulty
   };
