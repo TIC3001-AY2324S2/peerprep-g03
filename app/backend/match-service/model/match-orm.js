@@ -15,7 +15,7 @@ export async function ormCreateMatch(topic, difficulty) {
     await newMatch.save();
     return true;
   } catch (err) {
-    console.log("ERROR: Could not create new user");
+    console.log("ERROR: Could not create new match");
     return { err };
   }
 }

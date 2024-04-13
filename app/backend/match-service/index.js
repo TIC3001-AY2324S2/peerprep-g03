@@ -1,8 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import questionRoutes from "./routes/question-service-routes.js";
-import categoryRoutes from "./routes/category-service-routes.js";
+import matchingRoutes from "./routes/matching-service-routes.js";
 
 const app = express();
 
@@ -30,7 +29,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/matching", questionRoutes);
+app.use("/matching", matchingRoutes);
 // app.use("/categories", categoryRoutes);
 //app.use("/auth", authRoutes);
 

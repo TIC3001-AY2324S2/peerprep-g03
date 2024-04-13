@@ -12,8 +12,8 @@ let MatchingModelSchema = new Schema({
   difficulty: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
   },
 });
 
-export default mongoose.model("Assign4MatchModel", UserModelSchema);
+export default mongoose.model("Assign4MatchModel", MatchingModelSchema);

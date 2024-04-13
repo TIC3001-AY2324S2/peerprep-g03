@@ -1,6 +1,6 @@
 import http from "http";
 import index from "./index.js";
-//import "dotenv/config";
+import "dotenv/config";
 
 const port = process.env.PORT || 6000;
 

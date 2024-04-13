@@ -1,7 +1,7 @@
 import express from "express";
-import { ormCreateUser as _createUser } from "../model/user-orm.js";
-import { ormDeleteUser as _deleteUser } from "../model/user-orm.js";
-import {createQuestion as createPotentialMatch, deleteQuestion, getQuestionByComplexity, updateQuestion, getQuestion, getQuestionById} from "../controller/question-cotroller.js";
+import { ormCreateUser as _createUser } from "../model/match-orm.js";
+import { ormDeleteUser as _deleteUser } from "../model/match-orm.js";
+import { createPotentialMatch } from "../controller/matching-cotroller.js";
 
 const router = express.Router();
 
