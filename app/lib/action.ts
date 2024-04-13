@@ -145,26 +145,29 @@ export async function loginUser(formData: FormData) {
         });
 
         const accessToken = response.data.accessToken;
+        revalidatePath('/matching')
+        redirect('/matching')
+        // return {success: true, accessToken}
 
-        const url2 = 'http://localhost:3001/users/';
-        const response2 = await axios.get(url2, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,                
-            },
-            data: {
-                email: formData.email,
-            },            
-        });
+        // const url2 = 'http://localhost:3001/users/';
+        // const response2 = await axios.get(url2, {
+        //     headers: {
+        //         Authorization: `Bearer ${accessToken}`,                
+        //     },
+        //     data: {
+        //         email: formData.email,
+        //     },            
+        // });
 
-        if (response2.data) {
-            console.log('User data:', response2.data);
-        } else {
-            console.warn('No user data found in response');
-        }
+        // if (response2.data) {
+        //     console.log('User data:', response2.data);
+        // } else {
+        //     console.warn('No user data found in response');
+        // }
 
-        const userData = response2.data;
+        // const userData = response2.data;
 
-        return userData;
+        // return userData;
         
     } catch (error) {
         console.error('Error:', error.message);

@@ -2,11 +2,13 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 app = Flask(__name__)
+CORS(app)
 
 # Initialize database connection
 cosmos_db_connection_string = os.getenv("COSMOS_DB_CONNECTION_STRING")
