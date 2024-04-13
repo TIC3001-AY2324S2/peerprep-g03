@@ -21,7 +21,7 @@ const studentSchema = mongoose.Schema({
     type: String,
     required: [true, "Please enter matchStatus"],
   },
-});
+},{ timestamps: true });
 
 // export Student model to be used in controller
 module.exports = mongoose.model('Student', studentSchema)
