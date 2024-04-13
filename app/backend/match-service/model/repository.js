@@ -18,6 +18,12 @@ let db = mongoose.connection;
 db.on("connected", () => console.log("MongoDB Connected!"));
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
+export async function createMatch(params) {
+  params._id = new mongoose.Types.ObjectId();
+
+  return new UserModel(params);
+}
+
 export async function createUser(params) {
   params._id = new mongoose.Types.ObjectId();
 
