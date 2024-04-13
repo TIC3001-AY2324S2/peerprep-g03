@@ -4,7 +4,7 @@ import { questions } from '../lib/placeholder-data';
 // import { notFound } from 'next/navigation';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import MathchingForm from '@/app/ui/matching/find-match-form';
-import MatchingTable from '@/app/ui/matching/table';
+import {MatchingTable} from '@/app/ui/matching/table';
 
 
 export default async function Page() {
