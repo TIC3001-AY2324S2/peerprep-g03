@@ -2,9 +2,9 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
+// import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 import axios from 'axios';
-import { CreateUserSuccess } from '@/app/ui/CreateUserSuccess';
+// import { CreateUserSuccess } from '@/app/ui/CreateUserSuccess';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
@@ -28,7 +28,7 @@ export async function createUser(formData: FormData) {
     redirect('/user-service/login');
 }
 
-export async function loginUser(formData: FormData) {
+export async function getUser(formData: FormData) {
     try {
         const json = JSON.stringify(formData);
         const url = 'http://localhost:3001/auth/login';

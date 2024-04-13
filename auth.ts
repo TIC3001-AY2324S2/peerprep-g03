@@ -2,7 +2,7 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
-import { loginUser } from '@/app/lib/action';
+import { getUser } from '@/app/lib/action';
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -19,9 +19,9 @@ export const { auth, signIn, signOut } = NextAuth({
             email: email,
             password: password,
           }
-          const userData = await loginUser(rawFormData);
+          const userData = await getUser(rawFormData);
 
-          if(userData != undefined){
+          if(userData != undefined){          
             return userData
           }
           return null;

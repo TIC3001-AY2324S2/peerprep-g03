@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 export default function Form() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMatchFound, setIsMatchFound] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false); // Add state for form submission
   const router = useRouter();
 
   const handleFormSubmit = (event) => {
@@ -22,9 +23,10 @@ export default function Form() {
       const isMatched = true;/* Your logic to check for a match */ // Replace with actual logic
       setIsLoading(false);
       setIsMatchFound(isMatched);
+      setIsFormSubmitted(true); // Update form submission state
 
       if (isMatched) {
-        router.push('/matching/found'); // Redirect on match found
+        router.push('/matching/collaborate'); // Redirect on match found
       }
     }, 30000);
   };
@@ -118,7 +120,7 @@ export default function Form() {
         </div>
       )}
 
-      {!isLoading && !isMatchFound && (
+      {isFormSubmitted  && !isMatchFound && (
         <div className="text-center text-red-500 text-[20px]">
           No match found! Retry Matching!
         </div>

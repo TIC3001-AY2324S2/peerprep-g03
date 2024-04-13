@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-
-import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import { signOut } from '@/auth';
+import { ArrowRightEndOnRectangleIcon, PowerIcon } from '@heroicons/react/24/outline';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -44,3 +44,5 @@ export function LogInButton({ children, className, ...rest }: ButtonProps) {
     </button>
   );
 }
+
+

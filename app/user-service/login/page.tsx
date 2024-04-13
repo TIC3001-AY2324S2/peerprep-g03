@@ -1,14 +1,16 @@
+'use client'
+
 import PeerprepLogo from '@/app/ui/peerprep-logo';
-import { CreateQuestion, CreateCategory, CreateAccountButton, LogInButton } from '@/app/ui/questions/buttons';
-import { QuestionsTable, CategoriesTable } from '@/app/ui/questions/table';
+// import { QuestionsTable, CategoriesTable } from '@/app/ui/questions/table';
 // import { categories } from './lib/placeholder-data';
-import { notFound } from 'next/navigation';
+// import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import CreateAccountForm from '@/app/ui/user-service/create-acc-form';
+// import CreateAccountForm from '@/app/ui/user-service/create-acc-form';
 import LogInForm from '@/app/ui/user-service/login-form';
+import { UserProvider } from '@/app/lib/UserContext';
 
 
-export default async function Page() {
+export default function Page() {
 
   return (
     <main className="flex min-h-screen flex-col p-6">
@@ -33,7 +35,9 @@ export default async function Page() {
         <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/6 md:px-20">
           <h1 className="text-[20px]">Log in here</h1>
           <div className="ml-auto flex gap-4">
-            <LogInForm />
+            <UserProvider>
+              <LogInForm />
+            </UserProvider>
           </div>
         </div>
       </div>
