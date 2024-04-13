@@ -1,5 +1,5 @@
 import { UpdateQuestion, DeleteQuestion, ReadQuestion } from '@/app/ui/questions/buttons';
-import QuestionComplexity from '@/app/ui/questions/complexity';
+import QuestionComplexity from '@/app/ui/matching/complexity';
 import { QuestionsField } from '@/app/lib/definitions';
 import { Button } from '@/app/ui/button';
 
@@ -10,7 +10,7 @@ export async function MatchingTable({ questions }: { questions: QuestionsField[]
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
             {questions?.map((question) => (
-                 <div
+              <div
                 key={question.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
@@ -23,7 +23,7 @@ export async function MatchingTable({ questions }: { questions: QuestionsField[]
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
-                  <div className="flex justify-end gap-2">                
+                  <div className="flex justify-end gap-2">
                     <Button type='submit'>Match</Button>
                   </div>
                 </div>
@@ -56,7 +56,7 @@ export async function MatchingTable({ questions }: { questions: QuestionsField[]
                     <QuestionComplexity complexity={question.complexity} />
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex justify-end gap-3">                   
+                    <div className="flex justify-end gap-3">
                       <Button type='submit'>Match</Button>
                     </div>
                   </td>

@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function Form() {
     const [chatHistory, setChatHistory] = useState<string[]>([]);
     const [message, setMessage] = useState<string>('');
+    const chatHistoryRef = useRef<HTMLDivElement>(null);
 
     const handleSendMessage = () => {
         if (message.trim()) {
@@ -13,10 +14,21 @@ export default function Form() {
         }
     };
 
+    useEffect(() => {
+        // Scroll chat history to bottom when chatHistory or message changes
+        if (chatHistoryRef.current) {
+            chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+        }
+    }, [chatHistory, message]);
+
     return (
         <main className="flex flex-col h-screen">
             {/* Chat history display */}
-            <div className="bg-gray-200 p-4 rounded-lg mb-4 overflow-y-auto" style={{ height: '500' }}>
+            <div
+                ref={chatHistoryRef}
+                className="bg-gray-200 p-4 rounded-lg overflow-y-auto"
+                style={{ height: '250px' }}
+            >
                 {chatHistory.map((msg: string, index: number) => (
                     <div key={index} className="mb-2">
                         {msg}
