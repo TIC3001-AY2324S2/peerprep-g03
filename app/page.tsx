@@ -29,13 +29,20 @@ export default async function Page() {
               className="hidden md:block"
               alt="The Matching Service showing the interview"
             />
+            <Image
+              src="/MatchingService.png"
+              width={560}
+              height={620}
+              className="md:hidden block"
+              alt="Screenshots of the Matching Service showing mobile version"
+            />
           </div>
         </div>
         <div className="fflex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/6 md:px-20">
           <LogInButton />
           <br />
           <CreateAccountButton />
-        </div>        
+        </div>
       </div>
     </main>
   );

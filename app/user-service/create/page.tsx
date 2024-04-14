@@ -28,6 +28,13 @@ export default async function Page() {
               className="hidden md:block"
               alt="The Matching Service showing the interview"
             />
+            <Image
+              src="/MatchingService.png"
+              width={560}
+              height={620}
+              className="md:hidden block"
+              alt="Screenshots of the Matching Service showing mobile version"
+            />
           </div>
         </div>
         
