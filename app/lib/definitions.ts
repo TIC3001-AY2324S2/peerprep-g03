@@ -6,6 +6,11 @@ export type QuestionsField = {
     complexity: string;
   };
 
+export type MatchesField = {
+    topic: string;
+    difficulty: string;
+  };
+
   export type CategoriesField = {
     value: string;
     label: string;
