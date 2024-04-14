@@ -2,9 +2,11 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import {cookies} from 'next/headers'
 import { CategoriesField, QuestionsField } from '@/app/lib/definitions';
 import axios from 'axios';
 import { CreateUserSuccess } from '@/app/ui/CreateUserSuccess';
+import { access } from 'fs';
 
 export async function createQuestion(rawFormData: {
     rawFormData: {
@@ -143,33 +145,49 @@ export async function loginUser(formData: FormData) {
                 'Content-Type': 'application/json',
             },
         });
+        console.log(response.data)
+        if (response.status === 200 && response.data.accessToken) {
+            const { accessToken } = response.data;
+            cookies().set('accessToken', accessToken)
 
-        const accessToken = response.data.accessToken;
-        revalidatePath('/matching')
-        redirect('/matching')
-        // return {success: true, accessToken}
-
-        // const url2 = 'http://localhost:3001/users/';
-        // const response2 = await axios.get(url2, {
-        //     headers: {
-        //         Authorization: `Bearer ${accessToken}`,                
-        //     },
-        //     data: {
-        //         email: formData.email,
-        //     },            
-        // });
-
-        // if (response2.data) {
-        //     console.log('User data:', response2.data);
-        // } else {
-        //     console.warn('No user data found in response');
-        // }
-
-        // const userData = response2.data;
-
-        // return userData;
-        
+            return { success: true, token: accessToken };
+        } else {
+            // If the response is ok but no token is present, consider it a failure
+            return { success: false, message: "Login successful but no access token was provided." };
+        }
     } catch (error) {
-        console.error('Error:', error.message);
+        // Catch and handle errors, such as network issues or server errors
+        if (axios.isAxiosError(error)) {
+            // If the error is an AxiosError, you can extract more detailed info
+            return { success: false, message: error.response?.data.message || "An unexpected error occurred." };
+        } else {
+            // Generic error handling if the error is not from Axios
+            return { success: false, message: error.message };
+        }
     }
 }
+
+
+export async function getUsername(token: string) {
+    try {
+      const url = 'http://127.0.0.1:3001/auth/verify-token';
+      console.log(`Verifying token with: ${token}`);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('Verification response status: ', response.status);
+      if (response.ok) {
+        const userData = await response.json();
+        console.log('User data retrieved: ', userData)
+        return userData.verifiedUser.username;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error verifying token:', error);
+      return null;
+    }
+  }

@@ -1,92 +1,90 @@
-// Require the amqplib package to interact with RabbitMQ
+
 const amqp = require("amqplib");
 const WebSocket = require('ws');
 
-
-// Setting up a WebSocket server
-const wss = new WebSocket.Server({ port: 8080 });
-
-wss.on('connection', function connection(ws) {
-  console.log('A new client connected');
-
-  // You can store ws in a structure for targeted messaging if needed
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-  });
-
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
-
-  // Placeholder: Send an initial message or keep alive signal if necessary
-  ws.send('Connection established');
-});
-
-
-
+const ws = new WebSocket.Server({ port: 8080 });
 
 let pendingMatches = [];
+let clients = new Map(); // Map to track clients by username
 
 const difficultyLevels = {
   easy: 1,
   medium: 2,
-  hard: 3
+  hard: 3,
 };
 
+ws.on('connection', function connection(ws, req) {
+  ws.on('message', function incoming(message) {
+    const { type, username } = JSON.parse(message);
+    if (type === 'register') {
+      clients.set(username, ws);
+      console.log(`Registered ${username}`);
+    }
+  });
 
-// Immediately-invoked Function Expression (IIFE) to use async-await at the top level
+  ws.on('close', () => {
+    // Find and remove the username associated with this ws
+    for (let [username, clientWs] of clients.entries()) {
+      if (clientWs === ws) {
+        clients.delete(username);
+        console.log(`${username} disconnected`);
+        break;
+      }
+    }
+  });
+});
 
 function parseMessage(messageContent) {
-  const [studentName, studentId, topic, difficulty] = messageContent.split(" : ").map(part => part.trim());
-  return { studentName, studentId, topic, difficulty };
+  return JSON.parse(messageContent);
 }
 
 function findBestMatch(newMessage, pendingMatches) {
   let bestMatchIndex = -1;
   let smallestDifficultyGap = Infinity;
 
-  for (let i = 0; i < pendingMatches.length; i++) {
-    if (newMessage.topic === pendingMatches[i].topic) {
-      const difficultyGap = Math.abs(difficultyLevels[newMessage.difficulty] - difficultyLevels[pendingMatches[i].difficulty]);
+  pendingMatches.forEach((pendingMessage, index) => {
+    if (pendingMessage.username !== newMessage.username && pendingMessage.topics.some(topic => newMessage.topics.includes(topic))) {
+      const difficultyGap = Math.abs(difficultyLevels[newMessage.difficulty] - difficultyLevels[pendingMessage.difficulty]);
       if (difficultyGap < smallestDifficultyGap) {
         smallestDifficultyGap = difficultyGap;
-        bestMatchIndex = i;
+        bestMatchIndex = index;
       }
     }
-  }
+  });
   return bestMatchIndex;
 }
 
 (async () => {
-  // Create a connection to the local RabbitMQ server
-  const connection = await amqp.connect("amqp://localhost");
+  const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
 
-  // Assert a queue exists (or create it if it doesn't) named "message_queue"
-  await channel.assertQueue("message_queue");
+  await channel.assertQueue('message_queue');
 
-  // Start consuming messages from the queue "message_queue"
-  channel.consume("message_queue", (message) => {
-    console.log("Received message:", message.content.toString());
+  channel.consume('message_queue', (message) => {
     const newMessage = parseMessage(message.content.toString());
-    console.log("Parsed message:", newMessage);
-    
 
-    // Timeout for unmatched message
-    setTimeout(() => {
-      console.log(`Timeout! No match found for ${newMessage.studentName}`);
-      const timeoutMessage = 'Timeout! No match found.';
+    const matchIndex = findBestMatch(newMessage, pendingMatches);
 
-      // Broadcast timeout message to all connected clients
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ type: 'timeout', message: timeoutMessage }));
-        }
+    if (matchIndex !== -1) {
+      const matchedMessage = pendingMatches.splice(matchIndex, 1)[0]; // Remove matched
+
+      console.log(`Match found: ${newMessage.username} matched with ${matchedMessage.username}`);
+      [newMessage.username, matchedMessage.username].forEach(username => {
+        const client = clients.get(username);
+        if (client && client.readyState === WebSocket.OPEN) {
+          console.log("sending msg to client")
+          client.send(JSON.stringify({ type: 'match', matchWith: username === newMessage.username ? matchedMessage.username : newMessage.username }));
+        } else {
+          console.log("WebSocket is not open for username:", username);
+      }
       });
-    }, 3000); // 3-second timeout
+    } else {
+      pendingMatches.push(newMessage);
+      console.log('No match found, added to pending matches:', newMessage);
+    }
 
-    channel.ack(message); // Acknowledge the message so RabbitMQ knows it has been processed
+    channel.ack(message);
   });
 
-  console.log("Consumer waiting for messages...");
+  console.log('Consumer waiting for messages...');
 })();

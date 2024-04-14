@@ -4,50 +4,81 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { Button } from '@/app/ui/button';
 
-export default function Form() {
+export default function Form({ username }) {
   const [topics, setTopics] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isMatchFound, setIsMatchFound] = useState(null);  // null indicates no result yet
-  const [timeLeft, setTimeLeft] = useState(60);  // Initialize countdown timer
+  const [isMatchFound, setIsMatchFound] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [matchedUsername, setMatchedUsername] = useState('')
+  const [ws, setWs] = useState(null);
 
   useEffect(() => {
     fetch('http://127.0.0.1:5000/categories')
       .then(response => response.json())
       .then(data => {
-        const options = data.map(topic => ({ label: topic.label, value: topic.value }));
+        const options = data.map(topic => ({ label: topic.label, value: topic.label }));
         setTopics(options);
       })
       .catch(error => console.error('Error fetching topics:', error));
   }, []);
 
   useEffect(() => {
-    // Update the document title using the browser API
+    let intervalId;
     if (isLoading && timeLeft > 0) {
-      const intervalId = setInterval(() => {
-        setTimeLeft(timeLeft - 1);
+      intervalId = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
-
-      return () => clearInterval(intervalId);
-    } else if (timeLeft <= 0) {
-      setIsLoading(false);
-      setIsMatchFound(false);  // Simulate no match found when time runs out
+    } else {
+      clearInterval(intervalId);
+      if (timeLeft <= 0 && isLoading) {
+        setIsLoading(false);
+        // Only set isMatchFound to false if a match wasn't found
+        if (isMatchFound === null) {
+          setIsMatchFound(false);
+        }
+      }
     }
-  }, [isLoading, timeLeft]);
+    return () => clearInterval(intervalId);
+  }, [isLoading, timeLeft, isMatchFound]);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-    setIsMatchFound(null);  // Reset matching status
-    setTimeLeft(60);  // Reset the timer
+    setIsMatchFound(null);
+    setTimeLeft(60);
+
+    // Establish WebSocket connection only when submitting
+    const ws = new WebSocket('ws://127.0.0.1:8080');
+    ws.onopen = () => {
+      console.log('WebSocket Connected');
+      ws.send(JSON.stringify({type: 'register', username}))
+    };
+    ws.onmessage = (event) => {
+      console.log("message from ws: ", event.data)
+      const data = JSON.parse(event.data);
+      if (data.type === 'match') {
+          setIsMatchFound(true);
+          setIsLoading(false);
+          setMatchedUsername(data.matchWith)
+          console.log("Match found with " + data.matchWith);
+      } else if (data.type === 'timeout') {
+          setIsMatchFound(false);
+          setIsLoading(false);
+          console.log("No match found, retry matching!");
+      }
+  };
+
+    setWs(ws);
 
     const formData = {
       topics: selectedTopics.map(topic => topic.value),
-      difficulty: document.querySelector('input[name="complexity"]:checked')?.value
+      difficulty: document.querySelector('input[name="complexity"]:checked')?.value,
+      username
     };
 
-    fetch('http://localhost:3000/send', {
+    fetch('http://127.0.0.1:5001/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -56,8 +87,7 @@ export default function Form() {
     })
     .then(response => response.json())
     .then(data => {
-      setIsMatchFound(data.matchFound);
-      setIsLoading(false);
+      console.log("Data sent to RabbitMQ and waiting for match...");
     })
     .catch(error => {
       console.error('Failed to send data:', error);
@@ -65,6 +95,7 @@ export default function Form() {
       setIsMatchFound(false);
     });
   };
+
   return (
     <form onSubmit={handleFormSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -94,7 +125,7 @@ export default function Form() {
                   name="complexity"
                   type="radio"
                   value={level}
-                  onChange={(e) => setSelectedDifficulty(e.target.value)}  // Assume complexity can be multi-selected for demonstration
+                  onChange={(e) => setSelectedDifficulty(e.target.value)}
                   className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   required
                 />
@@ -122,6 +153,17 @@ export default function Form() {
           No match found! Retry Matching!
         </div>
       )}
+      {isMatchFound && (
+      <div className="match-info">
+        <h3>Match Found!</h3>
+        <p>Matched with: {matchedUsername}</p>
+        <p>Shared Topics: "PLACEHOLDER"</p>
+          <button className="start-button" onClick={() => ''}>
+            Start Collaboration
+          </button>
+
+      </div>
+    )}
     </form>
   );
 }

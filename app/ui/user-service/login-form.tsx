@@ -10,18 +10,30 @@ import { DontHaveAccount } from '@/app/ui/user-service/buttons';
 import { LogInButton } from '@/app/ui/button';
 import { loginUser } from '@/app/lib/action';
 
-export default function Form() {
+export default function Form({router}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('')
 
-  function handleFormAction(formData: FormData) {
+  async function handleFormAction(event) {
+    event.preventDefault();
     const rawFormData = {
-      email: formData.get('email'),
-      password: formData.get('password'),
+      email: email,
+      password: password,
     }
-    loginUser(rawFormData);
+    
+    const result = await loginUser(rawFormData);
+    if (result && result.success) {
+    router.push('/matching')
+    } else {
+      setPassword('');
+      setEmail('')
+      setErrorMessage('Invalid username / password')
+    }
   }
 
   return (
-    <form action={handleFormAction}> {/* todo: action={handleFormAction} */}
+    <form onSubmit={handleFormAction}> {/* todo: action={handleFormAction} */}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
 
         {/* Email Input */}
@@ -38,6 +50,8 @@ export default function Form() {
                 placeholder="Enter your email address"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 required
+                value = {email}
+                onChange={e => setEmail(e.target.value)}
               />
               <EnvelopeIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -58,10 +72,13 @@ export default function Form() {
                 placeholder="Enter password"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 required
+                value = {password}
+                onChange={e => setPassword(e.target.value)}
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
+          {errorMessage && (<div className="text-red-500 text-center mb-2">{errorMessage}</div>)}
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
