@@ -1,8 +1,11 @@
 const amqp = require("amqplib");
 const WebSocket = require('ws');
+const { v4:uuidv4 } = require('uuid');
 
 const ws = new WebSocket.Server({ port: 8080 });
 let clients = new Map(); // Track WebSocket connections by username
+let sessions = new Map()
+
 let pendingMatches = [];
 
 const difficultyLevels = {
@@ -23,6 +26,14 @@ ws.on('connection', (ws) => {
     if (type === 'register') {
       clients.set(username, ws);
       console.log(`WebSocket registered for ${username}`);
+    }  else if (type === 'collaborate' && sessions.has(username)) {
+      // Retrieve the session and broadcast the message to all connected clients
+      let session = sessions.get(username);
+      session.forEach(client => {
+        if (client !== socket && client.readyState === WebSocket.OPEN) {
+          client.send(message); // Broadcast the collaboration message
+        }
+      });
     }
   });
 
@@ -76,12 +87,14 @@ function findBestMatch(newMessage, pendingMatches) {
       console.log(`Match found: ${newMessage.username} matched with ${matchedMessage.username}`);
       [newMessage.username, matchedMessage.username].forEach(username => {
         const client = clients.get(username);
+        const sessionId = uuidv4()
         if (client && client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify({
             type: 'match',
             matchWith: username === newMessage.username ? matchedMessage.username : newMessage.username,
             topics: sharedTopics,
-            difficulty: adjustedDifficulty
+            difficulty: adjustedDifficulty,
+            sessionId: sessionId
           }));
         }
       });

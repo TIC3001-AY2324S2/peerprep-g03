@@ -1,12 +1,17 @@
+'use client'
+
 import PeerprepLogo from '@/app/ui/peerprep-logo';
 
 import { notFound } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import CollaborateForm from '@/app/ui/matching/collaborate-form';
 
 
-export default async function Page() {
-
+export default async function Page({params}) {
+  const searchParams = useSearchParams()
+  const sessionId = searchParams.get('sessionId')
+  console.log(searchParams)
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-40">
@@ -24,7 +29,7 @@ export default async function Page() {
           {/* Find your match form here */}
           <h1 className="text-[20px]">Collaborated with your match</h1>
           <div className="relative ml-auto">
-            <CollaborateForm />
+            <CollaborateForm sessionId={sessionId} />
           </div>
         </div>
       </div>

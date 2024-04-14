@@ -13,11 +13,14 @@ export default function Form({ username }) {
   const [isMatchFound, setIsMatchFound] = useState(null);
   const [timeLeft, setTimeLeft] = useState(60);
   const [matchedUsername, setMatchedUsername] = useState('')
+  const [matchedDifficulty, setMatchedDifficulty] = useState('')
+  const [matchedTopics, setMatchedTopics] = useState([])
+  const [sessionId, setSessionId] = useState({})
   const [ws, setWs] = useState(null);
   const router = useRouter();
 
   const handleStartCollaboration = () => {
-    router.push('/matching/collaborate');
+    router.push(`/matching/collaborate?sessionid=${sessionId}&peer=${matchedUsername}`);
   };
 
   useEffect(() => {
@@ -66,10 +69,16 @@ export default function Form({ username }) {
       console.log("message from ws: ", event.data)
       const data = JSON.parse(event.data);
       if (data.type === 'match') {
-        setIsMatchFound(true);
+        setTimeout(() => {
+          setIsMatchFound(true);
         setIsLoading(false);
         setMatchedUsername(data.matchWith)
+        setMatchedDifficulty(data.difficulty)
+        setMatchedTopics(data.topics)
+        setSessionId(data.sessionId)
         console.log("Match found with " + data.matchWith);
+        }, 3000);
+        
       } else if (data.type === 'timeout') {
         setIsMatchFound(false);
         setIsLoading(false);
@@ -163,11 +172,31 @@ export default function Form({ username }) {
         </div>
       )}
       {isMatchFound && (
-        <div className="match-info">
-          <h3 className="text-left text-green-600 text-[20px]">Match Found!</h3>
-          <p>Matched with: <b>{matchedUsername}</b></p>
-          <p>Shared Topics: "PLACEHOLDER"</p>
-          <Button type='submit' onClick={handleStartCollaboration}>
+        <div className="match-info p-4 bg-gray-50 rounded-md shadow">
+          <h3 className="text-left text-green-600 text-[20px] mb-4">Match Found!</h3>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-6 w-6 bg-gray-400 rounded-full flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 5l9-5-9-5-9 5 9 5z" /></svg>
+            </span>
+            <p>Matched with: <b>{matchedUsername.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</b></p>
+          </div>
+          <div className="mt-2">
+            <p className="text-sm font-medium">Shared Topics:</p>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {matchedTopics.map(topic => (
+                <span key={topic} className="cursor-pointer rounded-full px-3 py-1 text-xs font-medium text-white bg-green-500">
+                  {topic}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="mt-3">
+            <p className="text-sm font-medium">Difficulty Level:</p>
+            <span className={`mt-1 inline-block cursor-pointer rounded-full px-3 py-1 text-xs font-medium text-white ${matchedDifficulty === 'easy' ? 'bg-green-500' : matchedDifficulty === 'medium' ? 'bg-orange-500' : 'bg-red-500'}`}>
+              {matchedDifficulty.charAt(0).toUpperCase() + matchedDifficulty.slice(1)}
+            </span>
+          </div>
+          <Button type='button' onClick={handleStartCollaboration} className="mt-4">
             Start Collaboration
           </Button>
         </div>
