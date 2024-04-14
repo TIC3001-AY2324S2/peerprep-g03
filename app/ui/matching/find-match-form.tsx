@@ -37,6 +37,7 @@ export default function Form({ username }) {
         // Only set isMatchFound to false if a match wasn't found
         if (isMatchFound === null) {
           setIsMatchFound(false);
+          ws.close();
         }
       }
     }
@@ -47,7 +48,7 @@ export default function Form({ username }) {
     event.preventDefault();
     setIsLoading(true);
     setIsMatchFound(null);
-    setTimeLeft(60);
+    setTimeLeft(20);
 
     // Establish WebSocket connection only when submitting
     const ws = new WebSocket('ws://127.0.0.1:8080');

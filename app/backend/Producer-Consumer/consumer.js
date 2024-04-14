@@ -1,11 +1,9 @@
-
 const amqp = require("amqplib");
 const WebSocket = require('ws');
 
 const ws = new WebSocket.Server({ port: 8080 });
-
+let clients = new Map(); // Track WebSocket connections by username
 let pendingMatches = [];
-let clients = new Map(); // Map to track clients by username
 
 const difficultyLevels = {
   easy: 1,
@@ -13,24 +11,30 @@ const difficultyLevels = {
   hard: 3,
 };
 
-ws.on('connection', function connection(ws, req) {
-  ws.on('message', function incoming(message) {
+function adjustDifficulty(level1, level2) {
+  if (level1 === level2) return Object.keys(difficultyLevels).find(key => difficultyLevels[key] === level1);
+  if (Math.abs(level1 - level2) === 2) return 'medium';
+  return Object.keys(difficultyLevels).find(key => difficultyLevels[key] === Math.max(level1, level2));
+}
+
+ws.on('connection', (ws) => {
+  ws.on('message', (message) => {
     const { type, username } = JSON.parse(message);
     if (type === 'register') {
       clients.set(username, ws);
-      console.log(`Registered ${username}`);
+      console.log(`WebSocket registered for ${username}`);
     }
   });
 
   ws.on('close', () => {
-    // Find and remove the username associated with this ws
-    for (let [username, clientWs] of clients.entries()) {
+    clients.forEach((clientWs, username) => {
       if (clientWs === ws) {
         clients.delete(username);
         console.log(`${username} disconnected`);
-        break;
+        // Remove from pending matches if disconnected
+        pendingMatches = pendingMatches.filter(pm => pm.username !== username);
       }
-    }
+    });
   });
 });
 
@@ -41,50 +45,52 @@ function parseMessage(messageContent) {
 function findBestMatch(newMessage, pendingMatches) {
   let bestMatchIndex = -1;
   let smallestDifficultyGap = Infinity;
+  let sharedTopics = [];
 
   pendingMatches.forEach((pendingMessage, index) => {
-    if (pendingMessage.username !== newMessage.username && pendingMessage.topics.some(topic => newMessage.topics.includes(topic))) {
+    const commonTopics = newMessage.topics.filter(topic => pendingMessage.topics.includes(topic));
+    if (pendingMessage.username !== newMessage.username && commonTopics.length > 0) {
       const difficultyGap = Math.abs(difficultyLevels[newMessage.difficulty] - difficultyLevels[pendingMessage.difficulty]);
       if (difficultyGap < smallestDifficultyGap) {
         smallestDifficultyGap = difficultyGap;
         bestMatchIndex = index;
+        sharedTopics = commonTopics;
       }
     }
   });
-  return bestMatchIndex;
+
+  return { bestMatchIndex, sharedTopics };
 }
 
 (async () => {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
 
-  await channel.assertQueue('message_queue');
-
   channel.consume('message_queue', (message) => {
     const newMessage = parseMessage(message.content.toString());
+    const { bestMatchIndex, sharedTopics } = findBestMatch(newMessage, pendingMatches);
 
-    const matchIndex = findBestMatch(newMessage, pendingMatches);
-
-    if (matchIndex !== -1) {
-      const matchedMessage = pendingMatches.splice(matchIndex, 1)[0]; // Remove matched
-
+    if (bestMatchIndex !== -1) {
+      const matchedMessage = pendingMatches.splice(bestMatchIndex, 1)[0];
+      const adjustedDifficulty = adjustDifficulty(difficultyLevels[newMessage.difficulty], difficultyLevels[matchedMessage.difficulty]);
       console.log(`Match found: ${newMessage.username} matched with ${matchedMessage.username}`);
       [newMessage.username, matchedMessage.username].forEach(username => {
         const client = clients.get(username);
         if (client && client.readyState === WebSocket.OPEN) {
-          console.log("sending msg to client")
-          client.send(JSON.stringify({ type: 'match', matchWith: username === newMessage.username ? matchedMessage.username : newMessage.username }));
-        } else {
-          console.log("WebSocket is not open for username:", username);
-      }
+          client.send(JSON.stringify({
+            type: 'match',
+            matchWith: username === newMessage.username ? matchedMessage.username : newMessage.username,
+            topics: sharedTopics,
+            difficulty: adjustedDifficulty
+          }));
+        }
       });
+      channel.ack(message);
     } else {
       pendingMatches.push(newMessage);
-      console.log('No match found, added to pending matches:', newMessage);
+      console.log(`Stored in pending matches: ${newMessage.username}`);
     }
-
-    channel.ack(message);
-  });
+  }, { noAck: false });
 
   console.log('Consumer waiting for messages...');
 })();
