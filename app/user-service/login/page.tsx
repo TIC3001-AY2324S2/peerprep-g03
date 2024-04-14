@@ -11,7 +11,7 @@ import LogInForm from '@/app/ui/user-service/login-form';
 import { useRouter } from 'next/navigation'
 
 
-export default async function Page() {
+export default function Page() {
   const router = useRouter()
   return (
     <main className="flex min-h-screen flex-col p-6">

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { Button } from '@/app/ui/button';
+import { useRouter } from 'next/navigation';
 
 export default function Form({ username }) {
   const [topics, setTopics] = useState([]);
@@ -13,6 +14,11 @@ export default function Form({ username }) {
   const [timeLeft, setTimeLeft] = useState(60);
   const [matchedUsername, setMatchedUsername] = useState('')
   const [ws, setWs] = useState(null);
+  const router = useRouter();
+
+  const handleStartCollaboration = () => {
+    router.push('/matching/collaborate');
+  };
 
   useEffect(() => {
     fetch('http://127.0.0.1:5000/categories')
@@ -54,22 +60,22 @@ export default function Form({ username }) {
     const ws = new WebSocket('ws://127.0.0.1:8080');
     ws.onopen = () => {
       console.log('WebSocket Connected');
-      ws.send(JSON.stringify({type: 'register', username}))
+      ws.send(JSON.stringify({ type: 'register', username }))
     };
     ws.onmessage = (event) => {
       console.log("message from ws: ", event.data)
       const data = JSON.parse(event.data);
       if (data.type === 'match') {
-          setIsMatchFound(true);
-          setIsLoading(false);
-          setMatchedUsername(data.matchWith)
-          console.log("Match found with " + data.matchWith);
+        setIsMatchFound(true);
+        setIsLoading(false);
+        setMatchedUsername(data.matchWith)
+        console.log("Match found with " + data.matchWith);
       } else if (data.type === 'timeout') {
-          setIsMatchFound(false);
-          setIsLoading(false);
-          console.log("No match found, retry matching!");
+        setIsMatchFound(false);
+        setIsLoading(false);
+        console.log("No match found, retry matching!");
       }
-  };
+    };
 
     setWs(ws);
 
@@ -86,15 +92,16 @@ export default function Form({ username }) {
       },
       body: JSON.stringify(formData)
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log("Data sent to RabbitMQ and waiting for match...");
-    })
-    .catch(error => {
-      console.error('Failed to send data:', error);
-      setIsLoading(false);
-      setIsMatchFound(false);
-    });
+      .then(response => response.json())
+      .then(data => {
+        console.log("Data sent to RabbitMQ and waiting for match...");
+      })
+      .catch(error => {
+        console.error('Failed to send data:', error);
+        setIsLoading(false);
+        setIsMatchFound(false);
+      });
+    
   };
 
   return (
@@ -112,6 +119,7 @@ export default function Form({ username }) {
             closeMenuOnSelect={false}  // Keeps the dropdown open on selection
             placeholder="Select topics"
             value={selectedTopics}
+            required
           />
         </div>
 
@@ -155,16 +163,15 @@ export default function Form({ username }) {
         </div>
       )}
       {isMatchFound && (
-      <div className="match-info">
-        <h3>Match Found!</h3>
-        <p>Matched with: {matchedUsername}</p>
-        <p>Shared Topics: "PLACEHOLDER"</p>
-          <button className="start-button" onClick={() => ''}>
+        <div className="match-info">
+          <h3 className="text-left text-green-600 text-[20px]">Match Found!</h3>
+          <p>Matched with: <b>{matchedUsername}</b></p>
+          <p>Shared Topics: "PLACEHOLDER"</p>
+          <Button type='submit' onClick={handleStartCollaboration}>
             Start Collaboration
-          </button>
-
-      </div>
-    )}
+          </Button>
+        </div>
+      )}
     </form>
   );
 }
