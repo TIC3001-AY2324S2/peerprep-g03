@@ -1,4 +1,4 @@
-import { UpdateQuestion, DeleteQuestion, ReadQuestion } from '@/app/ui/questions/buttons';
+// import { UpdateQuestion, DeleteQuestion, ReadQuestion } from '@/app/ui/questions/buttons';
 import MatchesComplexity from '@/app/ui/matching/complexity';
 import { MatchesField } from '@/app/lib/definitions';
 import { Button } from '@/app/ui/button';
@@ -11,7 +11,8 @@ export async function MatchingTable({ matches }: { matches: MatchesField[] }) {
           <div className="md:hidden">
             {matches?.map((match) => (
               <div key={match.id}
-              className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+              className="mb-2 w-full rounded-md bg-white p-4"
+              >
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">

@@ -1,5 +1,4 @@
 'use client'
-
 import Link from 'next/link';
 import {
   DocumentTextIcon,
@@ -7,6 +6,7 @@ import {
 import { Button } from '@/app/ui/button';
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation'
+import { createMatch, deleteMatch } from '@/app/lib/action';
 
 export default function Form() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,11 +18,22 @@ export default function Form() {
     event.preventDefault();
     setIsLoading(true);
 
-    
+    const data = new FormData(event.target);
+    const formData = {
+      topic: data.get('topic').toString(),
+      difficulty: data.get('complexity').toString(),
+    }
+    // console.log(formData);
 
     // Simulate some processing time (replace with your actual logic)
+    try {
+      createMatch(formData);
+    } catch (error) {
+      console.log('Error : createMatch Error!' + error);
+    }
+
     setTimeout(() => {
-      const isMatched = true;/* Your logic to check for a match */ // Replace with actual logic
+      let isMatched;
       setIsLoading(false);
       setIsMatchFound(isMatched);
       setIsFormSubmitted(true); // Update form submission state
@@ -30,7 +41,19 @@ export default function Form() {
       if (isMatched) {
         router.push('/matching/collaborate'); // Redirect on match found
       }
-    }, 30000);
+    }, 20000);
+
+    setTimeout(() => {
+      try {
+        deleteMatch({ topic: formData.topic });
+      } catch (error) {
+        console.error('Error during match deletion:', error.message);
+
+      }
+    }, 20000);
+
+
+
   };
 
   return (
@@ -122,7 +145,7 @@ export default function Form() {
         </div>
       )}
 
-      {isFormSubmitted  && !isMatchFound && (
+      {isFormSubmitted && !isMatchFound && (
         <div className="text-center text-red-500 text-[20px]">
           No match found! Retry Matching!
         </div>
