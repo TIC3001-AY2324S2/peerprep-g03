@@ -12,6 +12,7 @@ let MatchingModelSchema = new Schema({
   difficulty: {
     type: String,
     required: true,
+    unique: false,
   },
 });
 

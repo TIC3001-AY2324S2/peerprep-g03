@@ -2,6 +2,7 @@ import {
   createMatch,
   createUser,
   deleteUser,
+  deleteMatch,
   findUserByEmail,
   updateUser,
   updateUserPrivilege,
@@ -42,8 +43,25 @@ export async function ormDeleteUser(email) {
     }
 
     return true;
-  } catch (err) {
+  } catch (err) {    
     console.log("ERROR: Could not delete user");
+    return { err };
+  }
+}
+
+export async function ormDeleteMatch(topic) {
+  try {
+    // console.log("topic: ", topic);
+    const result = await deleteMatch(topic);
+
+    // Checking if Match existed
+    if (result.deletedCount === 0) {
+      return false;
+    }
+
+    return true;
+  } catch (err) {    
+    console.log("ERROR: Could not delete match");
     return { err };
   }
 }

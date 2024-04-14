@@ -34,6 +34,10 @@ export async function deleteUser(email) {
   return MatchingModel.deleteOne({ email: email });
 }
 
+export async function deleteMatch(topic) {
+  return MatchingModel.deleteOne({ topic: topic });
+}
+
 export async function findUserByEmail(email) {
   return MatchingModel.findOne({ email: email });
 }
