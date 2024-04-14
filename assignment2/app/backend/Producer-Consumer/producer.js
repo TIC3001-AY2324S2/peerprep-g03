@@ -11,14 +11,14 @@ const app = express();
 const cors = require("cors");
 
 // Configure CORS to allow requests from a specific origin (http://localhost:3000) and to handle preflight requests
-app.options(
+/*app.options(
   "*",
   cors({
     origin: "http://localhost:3000",
     optionsSuccessStatus: 200,
   })
 );
-app.use(cors());
+app.use(cors());*/
 
 function parseMessage(messageContent) {
   const [studentName, studentId, topic, difficulty] = messageContent.split(" : ").map(part => part.trim());
@@ -38,6 +38,7 @@ function parseMessage(messageContent) {
 
 // Define a GET route "/send" that will be used to send messages to RabbitMQ
 app.get("/send/:message", async (req, res) => {
+  console.log("Producer recived: " + req.params.message);
   const message = parseMessage(req.params.message); // Get the message from the route parameter
 
   const connection = await amqp.connect("amqp://localhost"); // Create a connection to the local RabbitMQ server
