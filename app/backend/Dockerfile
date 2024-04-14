@@ -3,16 +3,6 @@ FROM python:latest
 # Update package lists and install Python 3
 RUN apt-get update && apt-get install -y python3
 
-# Set environment variables
-ENV VIRTUAL_ENV=/opt/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
-# Create the directory for the virtual environment
-RUN mkdir -p $VIRTUAL_ENV
-
-# Create a virtual environment
-RUN python3 -m venv $VIRTUAL_ENV
-
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -25,5 +15,8 @@ RUN pip install --no-cache-dir -r /app/question-service/requirements.txt
 # Expose port 8000 if your application runs on this port
 EXPOSE 8000
 
-# Running the python file
-CMD ["python3", "./question-service/app.py"]
+# Activate the virtual environment
+# For Windows
+# CMD [".\.venv\Scripts\activate && python3 .\question-service\app.py"]
+# For Mac
+CMD ["/bin/bash", "-c", "source .venv/bin/activate && python3 ./question-service/app.py"]
