@@ -65,3 +65,7 @@ export async function updateUserPrivilege(email, isAdmin) {
 export async function findAllUsers() {
   return MatchingModel.find();
 }
+
+export async function findAllMatches() {
+  return MatchingModel.find();
+}

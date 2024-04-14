@@ -4,16 +4,14 @@ import { ormCreateMatch as _createMatch } from "../model/match-orm.js";
 // import { ormUpdateUser as _updateUser } from "../model/user-orm.js";
 // import { ormUpdateUserPrivilege as _updateUserPrivilege } from "../model/user-orm.js";
 // import { ormFindAllUsers as _findAllUsers } from "../model/user-orm.js";
+import { ormFindAllMatches as _findAllMatches } from "../model/match-orm.js";
 
-export async function createPotentialMatch(req, res) {
+export async function createMatch(req, res) {
     try {
         const { topic, difficulty } = req.body;
 
-        // const salt = bcrypt.genSaltSync(10);
-        // const hashedPassword = bcrypt.hashSync(password, salt);
-
         if (topic && difficulty) {
-            console.log(`CREATE USER: Email Obtained: ${topic}`);
+            console.log(`CREATE MATCH: Topic Obtained: ${topic}`);
             const resp = await _createMatch(topic, difficulty);
             console.log(resp);
             if (resp.err) {
@@ -38,3 +36,23 @@ export async function createPotentialMatch(req, res) {
             .json({ message: "Database failure when creating new match!" });
     }
 }
+
+export async function getAllMatches(req, res) {
+    console.log(`GET ALL USERS`);
+  
+    const response = await _findAllMatches();
+  
+    console.log(response);
+  
+    if (response === null) {
+      return res.status(404).json({ message: `No match exist!` });
+    } else if (response.err) {
+      return res.status(400).json({ message: "Could not find matches!" });
+    } else {
+      console.log(`Matches found!`);
+      return res.status(200).json({
+        message: `Found matches!`,
+        matches: response,
+      });
+    }
+  }

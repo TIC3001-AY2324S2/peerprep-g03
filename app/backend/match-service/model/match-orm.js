@@ -6,6 +6,7 @@ import {
   updateUser,
   updateUserPrivilege,
   findAllUsers,
+  findAllMatches,
 } from "./repository.js";
 
 //need to separate orm functions from repository to decouple business ldifficultygic from persistence
@@ -109,6 +110,22 @@ export async function ormFindAllUsers() {
     return null;
   } catch (err) {
     console.log("ERROR: Could not find users");
+    return { err };
+  }
+}
+
+export async function ormFindAllMatches() {
+  try {
+    const result = await findAllMatches();
+
+    // Checking if Match exist
+    if (result.length !== 0) {
+      return result;
+    }
+
+    return null;
+  } catch (err) {
+    console.log("ERROR: Could not find matches");
     return { err };
   }
 }
