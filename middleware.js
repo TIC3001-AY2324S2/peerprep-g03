@@ -36,7 +36,7 @@ export async function middleware(request) {
   }
 
   // Allow navigation to login page without token check
-  if (pathname.startsWith('/user-service/login') || (pathname.startsWith('/user-service/create'))) {
+  if (pathname.startsWith('/user-service/login') || (pathname.startsWith('/user-service/create')) || (pathname === '/')) {
     console.log("Accessing login page, skipping token check.");
     return NextResponse.next();
   }

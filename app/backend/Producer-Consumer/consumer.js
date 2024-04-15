@@ -23,18 +23,30 @@ ws.on('connection', (socket, req) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   console.log("request url: ", req.url)
   const sessionId = url.searchParams.get('sessionId');
-  console.log("session in consumer is :", sessionId)
-  if (sessionId) {
-    sessions.get(sessionId).add(socket);
-    socket.on('message', message => {
-      console.log("message from consumer:", message)
-      sessions.get(sessionId).forEach(client => {
-        if (client !== socket && client.readyState === WebSocket.OPEN) {
-            client.send(message);
-        }
+  if (sessionId ) {
+    if (sessions.has(sessionId)) {
+      console.log("valid session id")
+      sessions.get(sessionId).add(socket);
+      socket.on('message', message => {
+        console.log(JSON.parse(message))
+        const parsedMsg = JSON.parse(message)
+        sessions.get(sessionId).forEach(client => {
+          if (client.readyState === WebSocket.OPEN) {
+              client.send(JSON.stringify({text: parsedMsg.text, username: parsedMsg.username}));
+          }
+      })
+    socket.on('close', () => {
+      sessions.delete(sessionId);
+      console.log("sessionid delete: ", sessionId)
     })
   })
  } else {
+    socket.close(1008, "Invalid session id or session id expired")
+    console.log("Invalid session id")
+    console.log("session id: ", sessionId, sessions)
+ }}
+ 
+ else {
   socket.on('message', (message) => {
     const { type, username } = JSON.parse(message);
     if (type === 'register') {
@@ -61,18 +73,20 @@ function parseMessage(messageContent) {
 
 function findBestMatch(newMessage, pendingMatches) {
   let bestMatchIndex = -1;
-  let smallestDifficultyGap = Infinity;
+  let highestTopicMatchCount = 0; // Tracks the highest count of matching topics
+  let smallestDifficultyGap = Infinity; // Tracks the smallest difficulty gap
   let sharedTopics = [];
 
   pendingMatches.forEach((pendingMessage, index) => {
     const commonTopics = newMessage.topics.filter(topic => pendingMessage.topics.includes(topic));
-    if (pendingMessage.username !== newMessage.username && commonTopics.length > 0) {
-      const difficultyGap = Math.abs(difficultyLevels[newMessage.difficulty] - difficultyLevels[pendingMessage.difficulty]);
-      if (difficultyGap < smallestDifficultyGap) {
-        smallestDifficultyGap = difficultyGap;
-        bestMatchIndex = index;
-        sharedTopics = commonTopics;
-      }
+    const difficultyGap = Math.abs(difficultyLevels[newMessage.difficulty] - difficultyLevels[pendingMessage.difficulty]);
+
+    if (pendingMessage.username !== newMessage.username && commonTopics.length > highestTopicMatchCount ||
+       (commonTopics.length === highestTopicMatchCount && difficultyGap < smallestDifficultyGap)) {
+      highestTopicMatchCount = commonTopics.length;
+      smallestDifficultyGap = difficultyGap;
+      bestMatchIndex = index;
+      sharedTopics = commonTopics;
     }
   });
 
@@ -98,12 +112,14 @@ function findBestMatch(newMessage, pendingMatches) {
         if (client && client.readyState === WebSocket.OPEN) {
           console.log("sessionid: ", sessionId )
           sessions.set(sessionId, new Set())
+          const difficulty = adjustedDifficulty
           client.send(JSON.stringify({
             type: 'match',
             matchWith: username === newMessage.username ? matchedMessage.username : newMessage.username,
             topics: sharedTopics,
-            difficulty: adjustedDifficulty,
-            sessionId: sessionId
+            difficulty,
+            sessionId: sessionId,
+            // question: fetchQuestion(sharedTopics?.join(','), difficulty)
           }));
         }
       });
@@ -116,3 +132,16 @@ function findBestMatch(newMessage, pendingMatches) {
 
   console.log('Consumer waiting for messages...');
 })();
+
+
+// async function fetchQuestion(topics, difficulty) {
+//   const url = `http://127.0.0.1:5000/questions?categories=${topics}&complexity=${encodeURIComponent(difficulty)}`;
+//     console.log("fetching question")
+//     response = await fetch(url)
+//     data = await response.json()
+//     if (data.length > 0) {
+//       const randomQuestion = data[Math.floor(Math.random() * data.length)];
+//       console.log(randomQuestion)
+//         return randomQuestion
+//     }
+//   }
