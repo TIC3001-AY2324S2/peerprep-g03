@@ -6,11 +6,14 @@ import { notFound } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import CollaborateForm from '@/app/ui/matching/collaborate-form';
+import MatchedQuestion from '@/app/ui/matching/question';
 
 
 export default async function Page() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('sessionid')
+  const topics = searchParams.get('topics')
+  const difficulty = searchParams.get('difficulty')
   console.log("session id from colloborate page: ", sessionId)
   return (
     <main className="flex min-h-screen flex-col p-6">
@@ -29,6 +32,7 @@ export default async function Page() {
           {/* Find your match form here */}
           <h1 className="text-[20px]">Collaborated with your match</h1>
           <div className="relative ml-auto">
+            <MatchedQuestion topics={topics} difficulty={difficulty}/>
             <CollaborateForm sessionId={sessionId} />
           </div>
         </div>

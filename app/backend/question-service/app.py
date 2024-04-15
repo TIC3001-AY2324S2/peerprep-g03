@@ -30,7 +30,7 @@ def get_questions():
         query['categories'] = {'$in': [category.strip().title() for category in category.split(',')]}
     
     # Fetch and return filtered questions
-    questions = list(questions_collection.find(query, {'_id': 1, 'title': 1, 'complexity': 1, 'categories': 1}))
+    questions = list(questions_collection.find(query))
     for question in questions:
         question['id'] = str(question['_id'])
         question['categories'] = ', '.join(question['categories'])

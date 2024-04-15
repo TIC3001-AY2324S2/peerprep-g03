@@ -20,7 +20,8 @@ export default function Form({ username }) {
   const router = useRouter();
 
   const handleStartCollaboration = () => {
-    router.push(`/matching/collaborate?sessionid=${sessionId}&peer=${matchedUsername}`);
+    const topics = matchedTopics.join(',');
+    router.push(`/matching/collaborate?sessionid=${sessionId}&peer=${matchedUsername}&topics=${topics}&difficulty=${matchedDifficulty}`);
   };
 
   useEffect(() => {
