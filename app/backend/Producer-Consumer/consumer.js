@@ -107,6 +107,7 @@ function findBestMatch(newMessage, pendingMatches) {
       console.log(`Match found: ${newMessage.username} matched with ${matchedMessage.username}`);
       const sessionId = uuidv4();
       console.log(`Match found: ${newMessage.username} matched with ${matchedMessage.username}`);
+      // const question = fetchQuestion(sharedTopics?.join(','), adjustedDifficulty)
       [newMessage.username, matchedMessage.username].forEach(username => {
         const client = clients.get(username);
         if (client && client.readyState === WebSocket.OPEN) {
@@ -119,6 +120,7 @@ function findBestMatch(newMessage, pendingMatches) {
             topics: sharedTopics,
             difficulty,
             sessionId: sessionId,
+            // question: JSON.stringify(question)
             // question: fetchQuestion(sharedTopics?.join(','), difficulty)
           }));
         }
