@@ -1,11 +1,10 @@
 const amqp = require("amqplib");
 const WebSocket = require('ws');
-const { v4:uuidv4 } = require('uuid');
+const { v4: uuidv4} = require('uuid')
 
 const ws = new WebSocket.Server({ port: 8080 });
 let clients = new Map(); // Track WebSocket connections by username
 let sessions = new Map()
-
 let pendingMatches = [];
 
 const difficultyLevels = {
@@ -20,26 +19,33 @@ function adjustDifficulty(level1, level2) {
   return Object.keys(difficultyLevels).find(key => difficultyLevels[key] === Math.max(level1, level2));
 }
 
-ws.on('connection', (ws) => {
-  ws.on('message', (message) => {
+ws.on('connection', (socket, req) => {
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  console.log("request url: ", req.url)
+  const sessionId = url.searchParams.get('sessionId');
+  console.log("session in consumer is :", sessionId)
+  if (sessionId) {
+    sessions.get(sessionId).add(socket);
+    socket.on('message', message => {
+      console.log("message from consumer:", message)
+      sessions.get(sessionId).forEach(client => {
+        if (client !== socket && client.readyState === WebSocket.OPEN) {
+            client.send(message);
+        }
+    })
+  })
+ } else {
+  socket.on('message', (message) => {
     const { type, username } = JSON.parse(message);
     if (type === 'register') {
-      clients.set(username, ws);
+      clients.set(username, socket);
       console.log(`WebSocket registered for ${username}`);
-    }  else if (type === 'collaborate' && sessions.has(username)) {
-      // Retrieve the session and broadcast the message to all connected clients
-      let session = sessions.get(username);
-      session.forEach(client => {
-        if (client !== socket && client.readyState === WebSocket.OPEN) {
-          client.send(message); // Broadcast the collaboration message
-        }
-      });
     }
   });
 
-  ws.on('close', () => {
+  socket.on('close', () => {
     clients.forEach((clientWs, username) => {
-      if (clientWs === ws) {
+      if (clientWs === socket) {
         clients.delete(username);
         console.log(`${username} disconnected`);
         // Remove from pending matches if disconnected
@@ -47,7 +53,7 @@ ws.on('connection', (ws) => {
       }
     });
   });
-});
+}});
 
 function parseMessage(messageContent) {
   return JSON.parse(messageContent);
@@ -85,10 +91,13 @@ function findBestMatch(newMessage, pendingMatches) {
       const matchedMessage = pendingMatches.splice(bestMatchIndex, 1)[0];
       const adjustedDifficulty = adjustDifficulty(difficultyLevels[newMessage.difficulty], difficultyLevels[matchedMessage.difficulty]);
       console.log(`Match found: ${newMessage.username} matched with ${matchedMessage.username}`);
+      const sessionId = uuidv4();
+      console.log(`Match found: ${newMessage.username} matched with ${matchedMessage.username}`);
       [newMessage.username, matchedMessage.username].forEach(username => {
         const client = clients.get(username);
-        const sessionId = uuidv4()
         if (client && client.readyState === WebSocket.OPEN) {
+          console.log("sessionid: ", sessionId )
+          sessions.set(sessionId, new Set())
           client.send(JSON.stringify({
             type: 'match',
             matchWith: username === newMessage.username ? matchedMessage.username : newMessage.username,

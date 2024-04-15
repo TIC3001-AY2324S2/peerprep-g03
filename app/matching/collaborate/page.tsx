@@ -8,10 +8,10 @@ import { PowerIcon } from '@heroicons/react/24/outline';
 import CollaborateForm from '@/app/ui/matching/collaborate-form';
 
 
-export default async function Page({params}) {
+export default async function Page() {
   const searchParams = useSearchParams()
-  const sessionId = searchParams.get('sessionId')
-  console.log(searchParams)
+  const sessionId = searchParams.get('sessionid')
+  console.log("session id from colloborate page: ", sessionId)
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-40">
