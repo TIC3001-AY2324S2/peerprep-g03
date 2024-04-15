@@ -1,6 +1,13 @@
 # CS3219-AY22-23-Project-Skeleton
 
 
+### Running Docker Compose
+1. Open Terminal/CMD/PowerShell.
+2. Navigate to root folder './peerprep-g03'.
+3. Run `docker-compose build --no-cache` to start building the Images and Containers in Docker.
+4. Run `docker-compose up` after the build process is complete.
+
+
 ### Start frontend
 1. Navigate to root folder './peerprep-g03'
 2. Install npm packages using 'npm i'.
@@ -26,13 +33,12 @@
     - Upon successful startup, the msg "Running on http://127.0.0.1:5000" should be displayed in your terminal
 
 
-    ## User Service
-
-### Quick Start
+### User Service Quick Start
 1. Rename `.env.sample` file to `.env`.
 2. Create a Cloud DB URL using Mongo Atlas.
 3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
 4. Install npm packages using `npm i`.
 5. Run User Service using `npm run dev`.
+
 
 ### Complete User Service Guide: [User Service Guide](./user-service/README.md)
