@@ -23,7 +23,7 @@ app.post("/send", async (req, res) => {
   };
   
   //Configure durable message queue
-  await channel.assertQueue("durable_message_queue", { durable: true });
+  await channel.assertQueue("durable_message_queue", args);
   //await channel.assertQueue("message_queue", args);
   
   //Send persistent message
