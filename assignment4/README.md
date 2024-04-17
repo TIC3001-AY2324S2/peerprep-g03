@@ -1,7 +1,9 @@
 # CS3219-AY22-23-Project-Skeleton
 
 ### 1. Start the RabbitMQ
-refer to the tutorial....
+1. Pull the official RabbitMQ image from Docker Hub: 'docker pull rabbitmq:3-management'
+2. Run a RabbitMQ container with the management plugin enabled: 'docker run -d --name some-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management'
+
 
 ### 2. Start the producer
 1. Navigate to matching servier folder './app/backend/matching-service'.
