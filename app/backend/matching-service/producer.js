@@ -21,9 +21,15 @@ app.post("/send", async (req, res) => {
       'x-message-ttl': 60000  // TTL in milliseconds
     }
   };
-  await channel.assertQueue("message_queue", args);
   
-  channel.sendToQueue("message_queue", Buffer.from(message));
+  //Configure durable message queue
+  await channel.assertQueue("durable_message_queue", { durable: true });
+  //await channel.assertQueue("message_queue", args);
+  
+  //Send persistent message
+  channel.sendToQueue("durable_message_queue", Buffer.from(message), { persistent: true });
+  //channel.sendToQueue("message_queue", Buffer.from(message));
+  
   await channel.close();
   await connection.close();
 

@@ -97,7 +97,8 @@ function findBestMatch(newMessage, pendingMatches) {
   const connection = await amqp.connect('amqp://localhost');
   const channel = await connection.createChannel();
 
-  channel.consume('message_queue', (message) => {
+  //channel.consume('message_queue', (message) => {
+  channel.consume('durable_message_queue', (message) => {  
     const newMessage = parseMessage(message.content.toString());
     const { bestMatchIndex, sharedTopics } = findBestMatch(newMessage, pendingMatches);
 
