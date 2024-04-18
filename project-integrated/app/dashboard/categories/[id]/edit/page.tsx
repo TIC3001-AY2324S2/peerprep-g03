@@ -15,10 +15,10 @@ export default async function Page({params}:{params: {id: string}}) {
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Landing Page', href: '/' },
+          { label: 'Dashboard', href: '/dashboard' },
           {
             label: 'Edit Categories',
-            href: `/categories/${id}/edit`,
+            href: `/dashboard/categories/${id}/edit`,
             active: true,
           },
         ]}

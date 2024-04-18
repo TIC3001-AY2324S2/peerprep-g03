@@ -89,8 +89,8 @@ export async function updateCategory(rawFormData: {
     } catch (error) {
         console.error('Failed to Create the category:', error.message);
     }
-    revalidatePath('/');
-    redirect('/');
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
 
 }
 

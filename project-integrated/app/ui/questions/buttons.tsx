@@ -42,7 +42,7 @@ export function UpdateQuestion({ id }: { id: string }) {
 export function UpdateCategory({ id }: { id: string }) {
   return (
     <Link
-      href={`/categories/${id}/edit`}
+      href={`/dashboard/categories/${id}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
