@@ -21,7 +21,7 @@ export default function Form({ username }) {
 
   const handleStartCollaboration = () => {
     const topics = matchedTopics.join(',');
-    router.push(`/matching/collaborate?sessionid=${sessionId}&peer=${matchedUsername}&topics=${topics}&difficulty=${matchedDifficulty}`);
+    router.push(`/dashboard/matching/collaborate?sessionid=${sessionId}&peer=${matchedUsername}&topics=${topics}&difficulty=${matchedDifficulty}`);
   };
 
   useEffect(() => {
