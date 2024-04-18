@@ -42,7 +42,7 @@ export async function middleware(request) {
   }
 
   // Check for the access token in cookies
-  const token = request.cookies.get('accessToken').value;
+  const token = request.cookies.get('accessToken')?.value;
   console.log("Token from cookies: ", token);
 
   if (!token) {
