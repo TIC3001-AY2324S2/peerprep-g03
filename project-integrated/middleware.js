@@ -42,7 +42,7 @@ export async function middleware(request) {
   }
 
   // Check for the access token in cookies
-  const token = request.cookies.get('accessToken')?.value;
+  const token = request.cookies.get('accessToken').value;
   console.log("Token from cookies: ", token);
 
   if (!token) {
@@ -56,6 +56,10 @@ export async function middleware(request) {
   if (!userData) {
     console.log("Token is invalid, redirecting to login.");
     return NextResponse.redirect(new URL('/user-service/login', request.url));
+  }
+
+  if (pathname === "/dashboard/questions" && !userData.verifiedUser.isAdmin) {
+    return NextResponse.redirect(new URL('/forbidden', request.url));
   }
 
   // If token is valid, proceed with the request

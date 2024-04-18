@@ -148,7 +148,7 @@ export async function loginUser(formData: FormData) {
         console.log(response.data)
         if (response.status === 200 && response.data.accessToken) {
             const { accessToken } = response.data;
-            cookies().set('accessToken', accessToken)
+            cookies().set('accessToken', accessToken, )
 
             return { success: true, token: accessToken };
         } else {
