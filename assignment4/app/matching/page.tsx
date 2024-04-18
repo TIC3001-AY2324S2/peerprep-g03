@@ -6,6 +6,7 @@ import { PowerIcon } from '@heroicons/react/24/outline';
 import MathchingForm from '@/app/ui/matching/find-match-form';
 import { MatchingTable } from '@/app/ui/matching/table';
 import { cookies } from 'next/headers'
+import Link from 'next/link';
 
 
 export default async function Page() {
@@ -20,18 +21,16 @@ export default async function Page() {
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div>
           <h1 className="text-[30px]">Matching</h1>
-          {/*
-          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-            <PowerIcon className="w-6" />
-            <div className="hidden md:block">Sign Out</div>
-          </button>
-  */}
+          <Link href="/api/logout" className="flex items-center px-3 py-2 bg-white rounded hover:bg-blue-200">
+            <PowerIcon className="w-4 h-4 mr-2" />
+            <span>Sign Out</span>
+          </Link>
           <p className="text-lg font-bold">Welcome, {username}!</p>
         </div>
         <div className="flex flex-col gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-3/5 md:px-20">
           {/* Find your match form here */}
-          <h1 className="text-[20px]">Find Matching here</h1>
-          <div className="relative ml-auto">
+          <h1 className="text-[20px] self-center">Find Matching here</h1>
+          <div className="flex flex-col items-center">
             <MathchingForm username={username} />
           </div>
         </div>
@@ -47,4 +46,3 @@ export default async function Page() {
     </main>
   );
 }
-

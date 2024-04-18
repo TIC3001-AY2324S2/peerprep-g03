@@ -15,6 +15,15 @@ export default function Form({ sessionId, username, collaborationEnded, setColla
         }
     };
 
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter' && !event.shiftKey) {  
+            event.preventDefault();  
+            handleSendMessage();
+        }
+    };
+
+
     const handleEndCollaboration = () => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
             setCollaborationEnded(true); 
@@ -75,6 +84,7 @@ export default function Form({ sessionId, username, collaborationEnded, setColla
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     placeholder="Type your message..."
                     className="flex-grow p-2 border rounded-l-lg"
                     disabled={collaborationEnded}
