@@ -9,16 +9,10 @@
 
 
 ### Starting backend
-1. Navigate to the backend directory
-    - In the project root directory, go to the backend folder using `cd app/backend`
-2. Set up the .env file
-    - Rename `.env.sample` file to `.env`.
-3. Install required libraries
-    - Install all necessary libaries by executing `pip install -r requirements.txt`
-4.  Run the program
-    - Start the flask application with `python app.py`
-5. Verify successful launch 
-    - Upon successful startup, the msg "Running on http://127.0.0.1:5000" should be displayed in your terminal
+1. Navigate to the question servie folder './app/backend/question-service'.
+2. Set up the .env file Rename `.env.sample` file to `.env`.
+3. Install required libraries using `pip install -r requirements.txt`
+4.  Run the program using 'python app.py'
 
 
     ## User Service
