@@ -24,7 +24,7 @@ export default function Form({router}) {
     
     const result = await loginUser(rawFormData);
     if (result && result.success) {
-    router.push('/matching')
+    router.push('/dashboard')
     } else {
       setPassword('');
       setEmail('')
