@@ -11,7 +11,7 @@ export default function PeerprepLogo() {
         href="/"
         className="flex w-full h-10 items">
         <GlobeAltIcon className="h-12 w-12 rotate-[15deg]" />
-        <p className="text-[44px]">PeerPrep-G03</p>
+        <p className="text-[25px]">PeerPrep-G03</p>
       </Link>
     </div>
   );
