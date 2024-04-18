@@ -25,7 +25,7 @@ export default function Form({ username }) {
   };
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/categories')
+    fetch('http://question-service:8000/categories')
       .then(response => response.json())
       .then(data => {
         const options = data.map(topic => ({ label: topic.label, value: topic.label }));
@@ -95,7 +95,7 @@ export default function Form({ username }) {
       username
     };
 
-    fetch('http://127.0.0.1:5001/send', {
+    fetch('http://matching-service-producer:5001/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

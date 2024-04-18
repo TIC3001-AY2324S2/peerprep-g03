@@ -94,7 +94,7 @@ function findBestMatch(newMessage, pendingMatches) {
 }
 
 (async () => {
-  const connection = await amqp.connect('amqp://localhost');
+  const connection = await amqp.connect('amqp://rabbitmq');
   const channel = await connection.createChannel();
   const args = {
     durable: true,

@@ -11,7 +11,7 @@ app.post("/send", async (req, res) => {
   const { username, topics, difficulty } = req.body;
   const message = JSON.stringify({ username, topics, difficulty });
   
-  const connection = await amqp.connect("amqp://127.0.0.1");
+  const connection = await amqp.connect("amqp://rabbitmq");
   const channel = await connection.createChannel();
 
   // Asserting a queue with x-message-ttl argument

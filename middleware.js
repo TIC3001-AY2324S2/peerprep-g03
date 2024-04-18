@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 async function verifyToken(token) {
   try {
-    const url = 'http://127.0.0.1:3001/auth/verify-token';
+    const url = 'http://user-service:3001/auth/verify-token';
     console.log(`Verifying token with: ${token}`);
     const response = await fetch(url, {
       method: 'GET',
