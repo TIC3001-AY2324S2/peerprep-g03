@@ -29,8 +29,8 @@ export async function createQuestion(rawFormData: {
     } catch (error) {
         console.error('Failed to Create the questions:', error.message);
     }
-    revalidatePath('/');
-    redirect('/');
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
 }
 
 export async function createCategories(formData: FormData) {
@@ -46,8 +46,8 @@ export async function createCategories(formData: FormData) {
     } catch (error) {
         console.error('Failed to Create the category:', error.message);
     }
-    revalidatePath('/');
-    redirect('/');
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
 }
 
 
@@ -64,8 +64,8 @@ export async function updateQuestion(rawFormData, id) {
     } catch (error) {
         console.error('Failed to Update the questions:', error.message);
     }
-    revalidatePath('/');
-    redirect('/');
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
 }
 
 export async function updateCategory(rawFormData: {

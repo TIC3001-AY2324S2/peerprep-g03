@@ -5,10 +5,11 @@ import { deleteQuestion, deleteCategory } from '@/app/lib/action';
 export function CreateQuestion() {
   return (
     <Link
-      href="/questions/create"
+      href="/dashboard/questions/create"
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
       <span className="hidden md:block">Create Question</span>{' '}
+      <span className="md:hidden">Create Question</span>{' '}
       <PlusIcon className="h-5 md:ml-4" />
     </Link>
   );
@@ -17,10 +18,11 @@ export function CreateQuestion() {
 export function CreateCategory() {
   return (
     <Link
-      href="/categories/create"
+      href="/dashboard/categories/create"
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
       <span className="hidden md:block">Create Category</span>{' '}
+      <span className="md:hidden">Create Category</span>{' '}
       <PlusIcon className="h-5 md:ml-4" />
     </Link>
   );
@@ -29,7 +31,7 @@ export function CreateCategory() {
 export function UpdateQuestion({ id }: { id: string }) {
   return (
     <Link
-      href={`/questions/${id}/edit`}
+      href={`/dashboard/questions/${id}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -51,7 +53,7 @@ export function UpdateCategory({ id }: { id: string }) {
 export function ReadQuestion({ id }: { id: string }) {
   return (
     <Link
-      href={`/questions/${id}/read`}
+      href={`/dashboard/questions/${id}/read`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <BookOpenIcon className="w-5" />
