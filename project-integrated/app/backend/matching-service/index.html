@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Question Collaboration Finder</title>
+  <style>
+    .loader {
+      border: 6px solid #f3f3f3; /* Light grey */
+      border-top: 6px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      display: block;
+      margin : auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+  <link rel="stylesheet" href="style.css">
+  <body>
+
+    <h1>Question Collaboration Finder</h1>
+    <form id="quizForm">
+      <label for="studentName">Student Name:</label>
+      <input type="text" id="studentName" name="studentName" placeholder="Enter your name">
+      <br><br>
+      <label for="studentId">Student ID:</label>
+      <input type="text" id="studentId" name="studentId" placeholder="Enter your ID">
+      <br><br>
+      <label for="topic">Select a topic:</label>
+      <select name="topic" id="topic">
+          <option value="math">Math</option>
+          <option value="science">Science</option>
+          <option value="english">English</option>
+          <!-- Add more topics as needed -->
+      </select>
+      <br><br>
+      <label for="difficulty">Select difficulty:</label>
+      <select name="difficulty" id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+          <!-- Add more difficulty levels as needed -->
+      </select>
+      <br><br>
+    </form>
+    <button onclick="sendMessage()">Find Match</button>
+    <br>
+    <div id="matchResult"></div>
+    <br>
+    <div id="stopwatch"></div>
+    <br><br>
+    <div id="loader" style="visibility: hidden;">
+      <span class="loader"></span>
+    </div>    
+  
+    <script>
+      let ws = new WebSocket('ws://localhost:8080');
+      let stopwatchInterval;
+      let elapsedTime = 0;
+  
+      ws.onopen = function() {
+        console.log('Connected to WebSocket server');
+      };
+  
+      ws.onmessage = function(event) {
+        console.log('Message from server ', event.data);
+        let data = JSON.parse(event.data);
+        
+        if (data.type === 'timeout') {
+          document.getElementById('matchResult').innerHTML = data.message;
+          document.getElementById('loader').style.visibility = 'hidden';
+          stopStopwatch()
+        }
+      };
+  
+      ws.onerror = function(error) {
+        console.log('WebSocket error: ' + error.message);
+        stopStopwatch()
+      };
+  
+      function sendMessage() {
+        
+        document.getElementById('matchResult').innerHTML  = '';
+        document.getElementById('loader').style.visibility = 'visible';
+        var studentName = document.getElementById('studentName').value;
+        var studentId = document.getElementById('studentId').value;
+        var topic = document.getElementById('topic').value;
+        var difficulty = document.getElementById('difficulty').value;
+        resetStopwatch();
+        startStopwatch();
+  
+        const message = `${studentName} : ${studentId} : ${topic} : ${difficulty}`;
+  
+        fetch(`http://localhost:3000/send/${encodeURIComponent(message)}`)
+          .then(response => response.text())
+          .then(data => {
+            console.log(data);
+            // Optionally hide the loading animation and display the response
+          }).catch(error => {
+            console.error('Error sending message:', error);
+            document.getElementById('matchResult').innerHTML = 'Error finding a match.';
+            document.getElementById('loader').style.visibility = 'hidden';
+          });
+      }
+
+      function startStopwatch() {
+        let startTime = Date.now() - elapsedTime;
+        stopwatchInterval = setInterval(() => {
+          elapsedTime = Date.now() - startTime;
+          document.getElementById('stopwatch').textContent = formatTime(elapsedTime);
+        }, 10); // Update every 10 milliseconds
+      }
+
+    function resetStopwatch() {
+      stopStopwatch();
+      elapsedTime = 0;
+      document.getElementById('stopwatch').textContent = "";
+    }
+    
+    function stopStopwatch() {
+      console.log('Stopping the stopwatch.');
+      clearInterval(stopwatchInterval);
+    }
+
+    function formatTime(milliseconds) {
+      let totalSeconds = milliseconds / 1000;
+      let minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+      let seconds = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
+      let millis = (milliseconds % 1000).toString().padStart(3, '0');
+      return `${minutes}:${seconds}.${millis}`;
+    }
+    </script>
+
+  </body>
+  </html>
+  
