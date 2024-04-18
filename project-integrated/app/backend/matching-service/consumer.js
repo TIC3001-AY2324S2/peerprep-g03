@@ -81,13 +81,16 @@ function findBestMatch(newMessage, pendingMatches) {
     const commonTopics = newMessage.topics.filter(topic => pendingMessage.topics.includes(topic));
     const difficultyGap = Math.abs(difficultyLevels[newMessage.difficulty] - difficultyLevels[pendingMessage.difficulty]);
 
-    if (pendingMessage.username !== newMessage.username && commonTopics.length > highestTopicMatchCount ||
-       (commonTopics.length === highestTopicMatchCount && difficultyGap < smallestDifficultyGap)) {
-      highestTopicMatchCount = commonTopics.length;
-      smallestDifficultyGap = difficultyGap;
-      bestMatchIndex = index;
-      sharedTopics = commonTopics;
-    }
+    if (pendingMessage.username !== newMessage.username && 
+      ((commonTopics.length > highestTopicMatchCount) ||
+      (commonTopics.length === highestTopicMatchCount && difficultyGap < smallestDifficultyGap))) {
+     if (commonTopics.length > 0) {
+       highestTopicMatchCount = commonTopics.length;
+       smallestDifficultyGap = difficultyGap;
+       bestMatchIndex = index;
+       sharedTopics = commonTopics;
+     }
+   }
   });
 
   return { bestMatchIndex, sharedTopics };
