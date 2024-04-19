@@ -1,0 +1,34 @@
+# Specify the version of the Docker Compose.
+version: "3.9"
+
+# Define the services and applications that make up your application.
+services:
+  user-service:
+    build: ./app/backend/user-service # Path to the directory containing the Dockerfile for building the user-service image.
+    ports:
+      - "3001:3001" # Maps port 3001 on the host to port 3001 in the container, making the app accessible on the host.
+    volumes:
+      - ./app/backend/user-service:/app # Mounts the host directory './demo-app' to '/app' in the container.
+      - /app/node_modules # Anonymous Volume
+    networks:
+      - demo-network # Connects the demo-app to the 'demo-network' network.
+  question-service:
+    build: ./app/backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app/backend:/app
+    networks:
+      - demo-network
+  frontend:
+    build: ./
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    networks:
+      - demo-network
+
+networks:
+  demo-network: # Defines a network named 'demo-network'.
+    driver: bridge # Uses the bridge driver for the network, which is the default and most common network type in Docker.
