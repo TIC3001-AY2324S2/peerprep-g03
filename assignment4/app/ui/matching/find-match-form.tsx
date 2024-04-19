@@ -25,7 +25,7 @@ export default function Form({ username }) {
   };
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/categories')
+    fetch('http://localhost:5000/categories')
       .then(response => response.json())
       .then(data => {
         const options = data.map(topic => ({ label: topic.label, value: topic.label }));
@@ -61,7 +61,7 @@ export default function Form({ username }) {
     setTimeLeft(20);
 
     // Establish WebSocket connection only when submitting
-    const ws = new WebSocket('ws://127.0.0.1:8080');
+    const ws = new WebSocket('ws://localhost:8080');
     ws.onopen = () => {
       console.log('WebSocket Connected');
       ws.send(JSON.stringify({ type: 'register', username }))
@@ -95,7 +95,7 @@ export default function Form({ username }) {
       username
     };
 
-    fetch('http://127.0.0.1:5001/send', {
+    fetch('http://localhost:5001/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -11,7 +11,7 @@ app.post("/send", async (req, res) => {
   const { username, topics, difficulty } = req.body;
   const message = JSON.stringify({ username, topics, difficulty });
   
-  const connection = await amqp.connect("amqp://127.0.0.1");
+  const connection = await amqp.connect("amqp://rabbitmq");
   const channel = await connection.createChannel();
 
   // Asserting a queue with x-message-ttl argument
@@ -21,9 +21,15 @@ app.post("/send", async (req, res) => {
       'x-message-ttl': 60000  // TTL in milliseconds
     }
   };
-  await channel.assertQueue("message_queue", args);
   
-  channel.sendToQueue("message_queue", Buffer.from(message));
+  //Configure durable message queue
+  await channel.assertQueue("durable_message_queue", args);
+  //await channel.assertQueue("message_queue", args);
+  
+  //Send persistent message
+  channel.sendToQueue("durable_message_queue", Buffer.from(message), { persistent: true });
+  //channel.sendToQueue("message_queue", Buffer.from(message));
+  
   await channel.close();
   await connection.close();
 

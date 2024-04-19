@@ -19,7 +19,7 @@ export async function createQuestion(rawFormData: {
 
     try {
         const json = JSON.stringify([rawFormData]);
-        const url = 'http://127.0.0.1:5000/questions';
+        const url = 'http://qservice:5000/questions';
         const response = await axios.post(url, json, {
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header
@@ -36,7 +36,7 @@ export async function createQuestion(rawFormData: {
 export async function createCategories(formData: FormData) {
     try {
         const json = JSON.stringify(formData);
-        const url = 'http://127.0.0.1:5000/categories';
+        const url = 'http://qservice:5000/categories';
         const response = await axios.post(url, json, {
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header
@@ -54,7 +54,7 @@ export async function createCategories(formData: FormData) {
 export async function updateQuestion(rawFormData, id) {
     try {
         const json = JSON.stringify(rawFormData);
-        const url = `http://127.0.0.1:5000/questions/${id}`;
+        const url = `http://qservice:5000/questions/${id}`;
         const response = await axios.patch(url, json, {
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header
@@ -79,7 +79,7 @@ export async function updateCategory(rawFormData: {
         const json = JSON.stringify(rawFormData);
         console.log(rawFormData);
         const id = rawFormData.value;
-        const url = `http://127.0.0.1:5000/categories/${id}`;
+        const url = `http://qservice:5000/categories/${id}`;
         const response = await axios.patch(url, json, {
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header
@@ -96,7 +96,7 @@ export async function updateCategory(rawFormData: {
 
 export async function deleteQuestion(id: string) {
     try {
-        const response = await axios.delete(`http://127.0.0.1:5000/questions/${id}`);
+        const response = await axios.delete(`http://qservice:5000/questions/${id}`);
         console.log(response.data);
         revalidatePath('/');
     } catch (err) {
@@ -107,7 +107,7 @@ export async function deleteQuestion(id: string) {
 
 export async function deleteCategory(id: string) {
     try {
-        const response = await axios.delete(`http://127.0.0.1:5000/categories/${id}`);
+        const response = await axios.delete(`http://qservice:5000/categories/${id}`);
         // console.log(response.data);
         revalidatePath('/');
     } catch (err) {
@@ -119,7 +119,7 @@ export async function deleteCategory(id: string) {
 export async function createUser(formData: FormData) {
     try {
         const json = JSON.stringify(formData);
-        const url = 'http://localhost:3001/users/';
+        const url = 'http://user-service:3001/users/';
         const response = await axios.post(url, json, {
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header
@@ -139,7 +139,7 @@ export async function createUser(formData: FormData) {
 export async function loginUser(formData: FormData) {
     try {
         const json = JSON.stringify(formData);
-        const url = 'http://localhost:3001/auth/login';
+        const url = 'http://user-service:3001/auth/login';
         const response = await axios.post(url, json, {
             headers: {
                 'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ export async function loginUser(formData: FormData) {
 
 export async function getUsername(token: string) {
     try {
-      const url = 'http://127.0.0.1:3001/auth/verify-token';
+      const url = 'http://user-service:3001/auth/verify-token';
       console.log(`Verifying token with: ${token}`);
       const response = await fetch(url, {
         method: 'GET',

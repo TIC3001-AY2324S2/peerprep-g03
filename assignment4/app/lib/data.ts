@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export async function fetchQuestions() {
     try {
-        const response = await axios.get('http://127.0.0.1:5000/questions');        
+        const response = await axios.get('http://qservice:5000/questions');        
         return response.data; 
     } catch (err) {
         console.error('Database Error:', err);
@@ -12,7 +12,7 @@ export async function fetchQuestions() {
 
 export async function fetchCategories() {
     try {
-        const response = await axios.get('http://127.0.0.1:5000/categories');        
+        const response = await axios.get('http://qservice:5000/categories');        
         return response.data; 
     } catch (err) {
         console.error('Database Error:', err);
@@ -22,7 +22,7 @@ export async function fetchCategories() {
 
 export async function fetchQuestionById(id: string) {
     try {
-        const response = await axios.get(`http://127.0.0.1:5000/questions/${id}`);
+        const response = await axios.get(`http://qservice:5000/questions/${id}`);
         const resultById = response.data;
         // console.log(resultById);
         return resultById; // This will be your JSON response
@@ -34,7 +34,7 @@ export async function fetchQuestionById(id: string) {
 
 export async function fetchCategoryById(id: string) {
     try {
-        const response = await axios.get(`http://127.0.0.1:5000/categories/${id}`);
+        const response = await axios.get(`http://qservice:5000/categories/${id}`);
         const resultById = response.data;
         return resultById; // This will be your JSON response
     } catch (err) {
