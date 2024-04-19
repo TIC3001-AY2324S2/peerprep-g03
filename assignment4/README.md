@@ -6,6 +6,7 @@
 2. Navigate to root folder './peerprep-g03/assignment4'.
 3. Run `docker-compose build --no-cache` to start building the Images and Containers in Docker.
 4. Run `docker-compose up` after the build process is complete.
+5. Note that matching-service-consumer-1 container needs to be started manually from Docker desktop AFTER rabbitmq is started. Although matching-service-consumer service has dependency stated in docker-compose.yml but it will still start before rabbitmq starts.
 
 
 ### Start frontend
