@@ -36,10 +36,10 @@ services:
       - /app/node_modules # Anonymous Volume
     networks:
       - demo-network # Connects the demo-app to the 'demo-network' network.
-  question-service:
+  qservice:
     build: ./app/backend/question-service
     ports:
-      - "8000:8000"
+      - "5000:5000"
     volumes:
       - ./app/backend/question-service:/app
     networks:
