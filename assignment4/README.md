@@ -1,6 +1,13 @@
 # CS3219-AY22-23-Project-Skeleton
 
 
+### Running Docker Compose
+1. Open Terminal/CMD/PowerShell.
+2. Navigate to root folder './peerprep-g03'.
+3. Run `docker-compose build --no-cache` to start building the Images and Containers in Docker.
+4. Run `docker-compose up` after the build process is complete.
+
+
 ### Start frontend
 1. Navigate to root folder './peerprep-g03'
 2. Install npm packages using 'npm i'.
